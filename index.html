@@ -317,6 +317,26 @@ body {
     <div class="docno-display" id="banner-docno"></div>
   </div>
 
+  <!-- 빠른 시작 -->
+  <div class="card" style="margin-top:12px;border:1.5px solid var(--green)">
+    <div class="card-title" style="color:var(--green)">⚡ 빠른 시작 — 층만 선택하고 바로 사진</div>
+    <div style="display:flex;gap:8px;align-items:flex-end">
+      <div class="fld" style="width:90px">
+        <label>동 (선택)</label>
+        <select class="sel" id="sel-dong-quick"></select>
+      </div>
+      <div class="fld" style="width:90px">
+        <label>층 선택</label>
+        <select class="sel" id="sel-floor-quick"></select>
+      </div>
+      <div class="fld" style="flex:1">
+        <label>상세 부위 (선택)</label>
+        <select class="sel" id="sel-detail-quick"></select>
+      </div>
+    </div>
+    <button onclick="quickStart()" style="width:100%;margin-top:10px;padding:12px;background:var(--green);color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">📷 사진 찍으러 바로 가기</button>
+  </div>
+
   <!-- 문서번호 -->
   <div class="card">
     <div class="card-title">문서 번호</div>
@@ -427,7 +447,9 @@ body {
   </div>
 
   <div style="height:12px"></div>
-  <button class="btn-primary" onclick="startInspection()">검측 시작 →</button>
+  <button class="btn-primary" onclick="startInspection();swTab('photo')" style="background:var(--green);margin-bottom:8px">📷 사진만 찍고 바로 시작</button>
+  <button class="btn-primary" onclick="startInspection()" style="background:var(--accent)">전체 정보 입력 후 시작 →</button>
+  <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:8px;padding:0 16px">나머지 정보는 사무실에서 웹으로 수정 가능</p>
   <div style="height:16px"></div>
 </div>
 
@@ -807,7 +829,31 @@ function addPerson() {
   toast('담당자 추가됨: ' + v);
 }
 
-function saveDocPrefix() {
+function quickStart() {
+  // 빠른 시작: 층만 있어도 OK, 나머지는 기존 저장값 또는 빈값
+  const dong   = document.getElementById('sel-dong-quick').value;
+  const floor  = document.getElementById('sel-floor-quick').value;
+  const detail = document.getElementById('sel-detail-quick').value;
+  // 빠른 시작값을 메인 셀렉트에도 반영
+  if (dong)   document.getElementById('sel-dong').value   = dong;
+  if (floor)  document.getElementById('sel-floor').value  = floor;
+  if (detail) document.getElementById('sel-detail').value = detail;
+  startInspection();
+  swTab('photo');
+}
+
+function syncQuickSelects() {
+  // 빠른 시작용 셀렉트를 메인과 동일하게 채움
+  ['dong','floor','detail'].forEach(k => {
+    const main  = document.getElementById('sel-' + k);
+    const quick = document.getElementById('sel-' + k + '-quick');
+    if (!main || !quick) return;
+    quick.innerHTML = main.innerHTML;
+    quick.value = main.value;
+  });
+}
+
+
   const v = document.getElementById('docno-prefix-inp').value.trim();
   if (!v) return;
   saveLS('docPrefix', v);
@@ -837,8 +883,7 @@ function startInspection() {
   const sup    = document.getElementById('sel-sup').value;
   const seq    = document.getElementById('doc-seq').value.trim();
 
-  if (!dong || !floor) { toast('동과 층을 선택하세요'); return; }
-  if (!gong) { toast('공종을 선택하세요'); return; }
+  // 필수 입력값 없음 — 빈칸은 사무실에서 수정 가능
 
   // 마지막 선택값 저장
   saveLS('lastProj', proj); saveLS('lastDong', dong); saveLS('lastFloor', floor);
@@ -851,7 +896,7 @@ function startInspection() {
 
   ST = {
     proj, dong, floor, detail, gong, sub, worker, agent, sup,
-    zone: dong + '동 ' + floor + (detail ? ' ' + detail : ''),
+    zone: [dong ? dong+'동' : '', floor, detail].filter(Boolean).join(' ') || '(부위 미입력)',
     docPrefix: ls('docPrefix', DEF.docPrefix),
     docSeq: seq,
     docFull: ls('docPrefix', DEF.docPrefix) + '-' + seq + '호',
@@ -1204,6 +1249,7 @@ function toast(msg) {
 
 /* ── 실행 ── */
 init();
+syncQuickSelects();
 </script>
 </body>
 </html>
