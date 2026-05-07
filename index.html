@@ -661,17 +661,21 @@ function init() {
 }
 
 function renderFloors() {
-  const sel = document.getElementById('sel-floor');
-  sel.innerHTML = '';
   const floors = ['B9F','B8F','B7F','B6F','B5F','B4F','B3F','B2F','B1F',
     '1F','2F','3F','4F','5F','6F','7F','8F','9F','10F','11F','12F','13F',
     '14F','15F','16F','17F','18F','19F','20F','21F','22F','23F','24F','25F',
     '26F','27F','28F','29F','30F','31F','32F','33F','34F','35F'];
-  floors.forEach(f => {
-    const o = document.createElement('option');
-    o.value = f; o.textContent = f; sel.appendChild(o);
+  const lastFloor = ls('lastFloor', DEF.lastFloor) || '3F';
+  ['sel-floor', 'sel-floor-quick'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '<option value="">층 선택</option>';
+    floors.forEach(f => {
+      const o = document.createElement('option');
+      o.value = f; o.textContent = f; sel.appendChild(o);
+    });
+    sel.value = lastFloor;
   });
-  sel.value = ls('lastFloor', DEF.lastFloor) || '3F';
 }
 
 function renderProjSel() {
@@ -686,22 +690,30 @@ function renderProjSel() {
 
 function renderDongSel() {
   const dongs = ls('dongs', DEF.dongs);
-  const sel = document.getElementById('sel-dong');
-  sel.innerHTML = '<option value="">선택</option>';
-  dongs.forEach(d => {
-    const o = document.createElement('option'); o.value = d; o.textContent = d; sel.appendChild(o);
+  const lastDong = ls('lastDong', DEF.lastDong);
+  ['sel-dong', 'sel-dong-quick'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '<option value="">동 선택</option>';
+    dongs.forEach(d => {
+      const o = document.createElement('option'); o.value = d; o.textContent = d; sel.appendChild(o);
+    });
+    sel.value = lastDong;
   });
-  sel.value = ls('lastDong', DEF.lastDong);
 }
 
 function renderDetailSel() {
   const details = ls('details', DEF.details);
-  const sel = document.getElementById('sel-detail');
-  sel.innerHTML = '<option value="">상세부위 선택</option>';
-  details.forEach(d => {
-    const o = document.createElement('option'); o.value = d; o.textContent = d; sel.appendChild(o);
+  const lastDetail = ls('lastDetail', DEF.lastDetail);
+  ['sel-detail', 'sel-detail-quick'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '<option value="">상세부위 선택</option>';
+    details.forEach(d => {
+      const o = document.createElement('option'); o.value = d; o.textContent = d; sel.appendChild(o);
+    });
+    sel.value = lastDetail;
   });
-  sel.value = ls('lastDetail', DEF.lastDetail);
 }
 
 function renderGongSel() {
@@ -830,27 +842,22 @@ function addPerson() {
 }
 
 function quickStart() {
-  // 빠른 시작: 층만 있어도 OK, 나머지는 기존 저장값 또는 빈값
   const dong   = document.getElementById('sel-dong-quick').value;
   const floor  = document.getElementById('sel-floor-quick').value;
   const detail = document.getElementById('sel-detail-quick').value;
-  // 빠른 시작값을 메인 셀렉트에도 반영
-  if (dong)   document.getElementById('sel-dong').value   = dong;
-  if (floor)  document.getElementById('sel-floor').value  = floor;
-  if (detail) document.getElementById('sel-detail').value = detail;
+  // 빠른시작 선택값을 메인 셀렉트에 반영 후 저장
+  document.getElementById('sel-dong').value   = dong;
+  document.getElementById('sel-floor').value  = floor;
+  document.getElementById('sel-detail').value = detail;
+  saveLS('lastDong', dong);
+  saveLS('lastFloor', floor);
+  saveLS('lastDetail', detail);
   startInspection();
   swTab('photo');
 }
 
 function syncQuickSelects() {
-  // 빠른 시작용 셀렉트를 메인과 동일하게 채움
-  ['dong','floor','detail'].forEach(k => {
-    const main  = document.getElementById('sel-' + k);
-    const quick = document.getElementById('sel-' + k + '-quick');
-    if (!main || !quick) return;
-    quick.innerHTML = main.innerHTML;
-    quick.value = main.value;
-  });
+  // render 함수들이 이미 양쪽 다 채우므로 별도 처리 불필요
 }
 
 
