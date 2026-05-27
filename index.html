@@ -4,415 +4,205 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <title>검측 시스템</title>
 <style>
-:root {
-  --bg: #F5F4F0;
-  --bg2: #ECEAE4;
-  --bg3: #E0DDD5;
-  --card: #FFFFFF;
-  --border: #D4D0C8;
-  --border2: #C4C0B6;
-  --text: #1A1916;
-  --text2: #5A5750;
-  --text3: #8A8780;
-  --accent: #1F3864;
-  --accent2: #2E75B6;
-  --green: #1D6A4A;
-  --green-bg: #E4F3EC;
-  --red: #B02A2A;
-  --red-bg: #FDEAEA;
-  --amber: #8A4E00;
-  --amber-bg: #FDF0DC;
-  --radius: 10px;
-  --radius-sm: 6px;
-  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.05);
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-body {
-  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100dvh;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-/* 레이아웃 */
-.app { max-width: 640px; margin: 0 auto; padding: 0 0 80px; }
-.screen { display: none; }
-.screen.active { display: block; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#F2F1ED;color:#1A1916;font-size:14px;line-height:1.5}
+.app{max-width:640px;margin:0 auto;padding-bottom:60px}
+.screen{display:none}.screen.active{display:block}
 
 /* 헤더 */
-.header {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(245,244,240,.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: .5px solid var(--border);
-  padding: 12px 16px;
-}
-.header-row { display: flex; align-items: center; gap: 10px; }
-.header h1 { font-size: 16px; font-weight: 600; flex: 1; }
-.header-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
-.back-btn {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--bg2); border: .5px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 14px; flex-shrink: 0;
-}
+.header{position:sticky;top:0;z-index:100;background:rgba(242,241,237,.93);backdrop-filter:blur(10px);border-bottom:.5px solid #D4D0C8;padding:12px 16px}
+.hrow{display:flex;align-items:center;gap:10px}
+.back{width:32px;height:32px;border-radius:50%;background:#E8E6E0;border:.5px solid #D4D0C8;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;flex-shrink:0}
+.htitle{font-size:15px;font-weight:600;flex:1}
+.hsub{font-size:11px;color:#8A8780;margin-top:1px}
 
 /* 탭 */
-.tab-bar {
-  display: flex; background: var(--card);
-  border-bottom: .5px solid var(--border);
-  overflow-x: auto; scrollbar-width: none;
-}
-.tab-bar::-webkit-scrollbar { display: none; }
-.tab-btn {
-  flex: 1; min-width: 70px; padding: 11px 6px;
-  font-size: 12px; font-weight: 500; background: none; border: none;
-  border-bottom: 2px solid transparent; cursor: pointer;
-  color: var(--text3); white-space: nowrap; transition: all .15s;
-}
-.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tabs{display:flex;background:#fff;border-bottom:.5px solid #D4D0C8;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1;min-width:68px;padding:10px 4px;font-size:12px;font-weight:500;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:#8A8780;white-space:nowrap}
+.tab.on{color:#1F3864;border-bottom-color:#1F3864}
 
 /* 카드 */
-.card {
-  background: var(--card); border: .5px solid var(--border);
-  border-radius: var(--radius); padding: 16px;
-  margin: 12px 16px 0; box-shadow: var(--shadow);
-}
-.card-title {
-  font-size: 11px; font-weight: 600; color: var(--text3);
-  text-transform: uppercase; letter-spacing: .07em; margin-bottom: 12px;
-}
+.card{background:#fff;border:.5px solid #D4D0C8;border-radius:10px;padding:15px;margin:10px 14px 0}
+.card-t{font-size:11px;font-weight:600;color:#8A8780;text-transform:uppercase;letter-spacing:.07em;margin-bottom:11px}
 
-/* 폼 요소 */
-.fld { display: flex; flex-direction: column; gap: 4px; }
-.fld label { font-size: 11px; color: var(--text2); font-weight: 500; }
-.inp, .sel, .ta {
-  width: 100%; padding: 9px 11px; font-size: 14px;
-  background: var(--bg); border: .5px solid var(--border);
-  border-radius: var(--radius-sm); color: var(--text);
-  font-family: inherit; transition: border-color .15s;
-  -webkit-appearance: none; appearance: none;
-}
-.inp:focus, .sel:focus, .ta:focus {
-  outline: none; border-color: var(--accent2);
-  background: #fff;
-}
-.ta { resize: none; height: 40px; }
-.sel { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8780' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+/* 폼 */
+.fld{display:flex;flex-direction:column;gap:3px}
+.fld label{font-size:11px;color:#5A5750;font-weight:500}
+input,select,textarea{width:100%;padding:8px 10px;font-size:13px;background:#F2F1ED;border:.5px solid #D4D0C8;border-radius:6px;color:#1A1916;font-family:inherit;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#2E75B6;background:#fff}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 5 5-5z' fill='%238A8780'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;padding-right:26px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
 
-/* 입력+추가 행 */
-.add-row { display: flex; gap: 6px; margin-top: 6px; }
-.add-row .inp { flex: 1; font-size: 13px; padding: 7px 10px; }
-.add-row .add-btn {
-  padding: 7px 12px; background: var(--bg2); border: .5px solid var(--border);
-  border-radius: var(--radius-sm); font-size: 12px; cursor: pointer;
-  color: var(--text2); white-space: nowrap; font-family: inherit;
-}
-.add-row .add-btn:active { background: var(--bg3); }
-
-/* 그리드 */
-.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-
-/* 동/층/상세 행 */
-.zone-row { display: flex; align-items: flex-end; gap: 6px; flex-wrap: nowrap; }
-.zone-row .inp { width: 64px; flex-shrink: 0; }
-.zone-row .sel { width: 80px; flex-shrink: 0; }
-.zone-row .grow { flex: 1; min-width: 0; }
-.zone-sep { font-size: 13px; color: var(--text2); padding-bottom: 9px; flex-shrink: 0; }
-
-/* 문서번호 */
-.docno-row {
-  display: flex; align-items: center; gap: 6px;
-  background: var(--bg); border: .5px solid var(--border);
-  border-radius: var(--radius-sm); padding: 8px 11px;
-}
-.docno-row .prefix { font-size: 12px; color: var(--text2); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.docno-row .seq {
-  width: 52px; border: none; background: var(--bg2);
-  border-radius: 4px; padding: 4px 6px; font-size: 14px;
-  font-weight: 600; text-align: center; color: var(--accent);
-  font-family: inherit;
-}
-.docno-row .seq:focus { outline: none; background: #fff; }
-.docno-row span { font-size: 12px; color: var(--text3); flex-shrink: 0; }
+/* 추가 행 */
+.add-row{display:flex;gap:6px;margin-top:6px}
+.add-row input{flex:1;font-size:12px;padding:7px 9px}
+.add-btn{padding:7px 11px;background:#E8E6E0;border:.5px solid #D4D0C8;border-radius:6px;font-size:12px;cursor:pointer;color:#5A5750;white-space:nowrap;font-family:inherit}
+.add-btn:active{background:#D4D0C8}
 
 /* 버튼 */
-.btn-primary {
-  width: calc(100% - 32px); margin: 12px 16px 0;
-  padding: 14px; background: var(--accent);
-  color: #fff; border: none; border-radius: var(--radius);
-  font-size: 15px; font-weight: 600; cursor: pointer;
-  font-family: inherit; letter-spacing: .02em;
-  box-shadow: 0 2px 8px rgba(31,56,100,.25);
-  transition: opacity .15s;
-}
-.btn-primary:active { opacity: .85; }
+.btn{width:calc(100% - 28px);margin:10px 14px 0;padding:13px;background:#1F3864;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.green{background:#1D6A4A}
+.btn-s{padding:7px 13px;background:#E8E6E0;border:.5px solid #D4D0C8;border-radius:6px;font-size:12px;cursor:pointer;color:#1A1916;font-family:inherit}
+.btn-s:active{background:#D4D0C8}
 
-.btn-sec {
-  padding: 8px 14px; background: var(--bg2); border: .5px solid var(--border);
-  border-radius: var(--radius-sm); font-size: 12px; cursor: pointer;
-  color: var(--text2); font-family: inherit;
-}
-.btn-sec:active { background: var(--bg3); }
+/* 배너 */
+.banner{padding:24px 16px 16px;background:linear-gradient(150deg,#1F3864,#2E75B6);color:#fff}
+.banner h2{font-size:21px;font-weight:700;margin-bottom:3px}
+.banner p{font-size:12px;opacity:.75}
+.banner .docno{margin-top:10px;font-size:11px;opacity:.8}
 
-/* 체크리스트 항목 */
-.ci {
-  display: flex; align-items: flex-start; gap: 10px;
-  background: var(--card); border: .5px solid var(--border);
-  border-radius: var(--radius-sm); padding: 11px 12px;
-  margin: 0 16px 6px; transition: border-color .15s, background .15s;
-}
-.ci.fail { border-color: #E08080; background: var(--red-bg); }
-.ci-num { font-size: 11px; color: var(--text3); width: 18px; text-align: right; margin-top: 2px; flex-shrink: 0; }
-.ci-body { flex: 1; min-width: 0; }
-.ci-name { font-size: 13px; font-weight: 500; line-height: 1.4; }
-.ci-std { font-size: 11px; color: var(--text3); margin-top: 2px; }
-.ci-note {
-  width: 100%; margin-top: 7px; padding: 6px 9px;
-  font-size: 12px; background: #fff; border: .5px solid #E08080;
-  border-radius: var(--radius-sm); color: var(--text); font-family: inherit;
-  resize: none; height: 34px;
-}
-.ox-wrap { display: flex; gap: 5px; flex-shrink: 0; margin-top: 1px; }
-.ox-btn {
-  width: 38px; height: 34px; border-radius: var(--radius-sm);
-  border: .5px solid var(--border); background: var(--bg);
-  font-size: 15px; cursor: pointer; display: flex;
-  align-items: center; justify-content: center; transition: all .12s;
-}
-.ox-btn.ok { background: var(--green-bg); border-color: #6DBD9A; color: var(--green); }
-.ox-btn.fail { background: var(--red-bg); border-color: #E08080; color: var(--red); }
-.ox-btn:active { transform: scale(.92); }
+/* 빠른시작 */
+.quick-card{background:#fff;border:1.5px solid #1D6A4A;border-radius:10px;padding:15px;margin:10px 14px 0}
+.quick-t{font-size:11px;font-weight:600;color:#1D6A4A;text-transform:uppercase;letter-spacing:.07em;margin-bottom:11px}
+.zone-row{display:flex;gap:6px;align-items:flex-end}
+.zone-row .fld.sm{width:80px;flex-shrink:0}
+.zone-row .fld.grow{flex:1;min-width:0}
+
+/* 체크리스트 */
+.ci{display:flex;align-items:flex-start;gap:9px;background:#fff;border:.5px solid #D4D0C8;border-radius:6px;padding:10px 11px;margin:0 14px 6px}
+.ci.fail{border-color:#E08080;background:#FFF5F5}
+.ci-n{font-size:11px;color:#8A8780;width:17px;text-align:right;margin-top:2px;flex-shrink:0}
+.ci-body{flex:1;min-width:0}
+.ci-name{font-size:13px;font-weight:500;line-height:1.4}
+.ci-std{font-size:11px;color:#8A8780;margin-top:2px}
+.ci-note{width:100%;margin-top:6px;padding:5px 8px;font-size:12px;background:#fff;border:.5px solid #E08080;border-radius:6px;font-family:inherit;resize:none;height:32px}
+.ox{display:flex;gap:4px;flex-shrink:0;margin-top:1px}
+.ox-btn{width:36px;height:32px;border-radius:6px;border:.5px solid #D4D0C8;background:#F2F1ED;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ox-btn.ok{background:#E4F3EC;border-color:#6DBD9A;color:#1D6A4A}
+.ox-btn.ng{background:#FDEAEA;border-color:#E08080;color:#B02A2A}
+
+/* 사진 */
+.photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pc{position:relative;aspect-ratio:4/3;border:1.5px dashed #C4C0B6;border-radius:6px;background:#F2F1ED;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.pc input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.pc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pc.filled{border-style:solid;border-color:#6DBD9A}
+.pc-ico{font-size:22px;z-index:1}
+.pc-lbl{font-size:11px;color:#8A8780;z-index:1}
+.pc-del{position:absolute;top:4px;right:4px;z-index:2;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;border:none;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cap{width:100%;margin-top:5px;padding:5px 8px;font-size:12px;background:#F2F1ED;border:.5px solid #D4D0C8;border-radius:6px;color:#1A1916;font-family:inherit}
 
 /* 진행바 */
-.prog-bar-wrap { height: 4px; background: var(--bg2); border-radius: 100px; overflow: hidden; margin-top: 6px; }
-.prog-bar-fill { height: 100%; background: var(--green); border-radius: 100px; transition: width .35s; }
-
-/* 사진 그리드 */
-.photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.photo-cell {
-  position: relative; aspect-ratio: 4/3;
-  border: 1.5px dashed var(--border2); border-radius: var(--radius-sm);
-  background: var(--bg); overflow: hidden; cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-}
-.photo-cell input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-.photo-cell img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.photo-cell.filled { border-style: solid; border-color: #6DBD9A; }
-.photo-cell .pc-ico { font-size: 24px; z-index: 1; }
-.photo-cell .pc-lbl { font-size: 11px; color: var(--text3); z-index: 1; }
-.photo-del {
-  position: absolute; top: 5px; right: 5px; z-index: 2;
-  width: 20px; height: 20px; border-radius: 50%;
-  background: rgba(0,0,0,.55); color: #fff; border: none;
-  font-size: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-}
-.photo-caption {
-  width: 100%; margin-top: 5px; padding: 6px 9px; font-size: 12px;
-  background: var(--bg); border: .5px solid var(--border);
-  border-radius: var(--radius-sm); color: var(--text); font-family: inherit;
-}
-
-/* 배지 */
-.badge {
-  display: inline-flex; align-items: center;
-  padding: 2px 9px; border-radius: 100px; font-size: 11px; font-weight: 500;
-}
-.badge-g { background: var(--green-bg); color: var(--green); }
-.badge-r { background: var(--red-bg); color: var(--red); }
-.badge-n { background: var(--bg2); color: var(--text3); }
-
-/* 출력 버튼 */
-.dl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 16px 0; }
-.dl-btn {
-  padding: 13px 10px; background: var(--accent); color: #fff;
-  border: none; border-radius: var(--radius); font-size: 13px;
-  font-weight: 500; cursor: pointer; font-family: inherit;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  box-shadow: 0 2px 6px rgba(31,56,100,.2);
-}
-.dl-btn:active { opacity: .85; }
-.dl-btn.full { grid-column: span 2; }
-.dl-btn.outline { background: none; color: var(--accent); border: 1px solid var(--accent); box-shadow: none; }
+.prog{background:#E8E6E0;border-radius:100px;height:4px;overflow:hidden;margin-top:5px}
+.prog-fill{height:100%;background:#1D6A4A;border-radius:100px;transition:width .3s}
 
 /* 갑지 미리보기 */
-.form-preview {
-  border: .5px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;
-  font-size: 12px;
-}
-.fp-row { display: grid; grid-template-columns: 88px 1fr; }
-.fp-lbl {
-  background: var(--bg2); padding: 7px 10px; font-weight: 500; font-size: 11px;
-  border-right: .5px solid var(--border); border-bottom: .5px solid var(--border);
-  display: flex; align-items: center;
-}
-.fp-val {
-  padding: 7px 10px; border-bottom: .5px solid var(--border);
-  font-size: 12px; word-break: break-all;
-}
-.fp-row:last-child .fp-lbl, .fp-row:last-child .fp-val { border-bottom: none; }
+.fp{border:.5px solid #D4D0C8;border-radius:6px;overflow:hidden;font-size:12px}
+.fp-row{display:grid;grid-template-columns:88px 1fr}
+.fp-l{background:#F2F1ED;padding:6px 9px;font-weight:500;font-size:11px;border-right:.5px solid #D4D0C8;border-bottom:.5px solid #D4D0C8;display:flex;align-items:center}
+.fp-v{padding:6px 9px;border-bottom:.5px solid #D4D0C8;font-size:12px;word-break:break-all}
+.fp-row:last-child .fp-l,.fp-row:last-child .fp-v{border-bottom:none}
 
-/* 요약 카드 */
-.sum-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
-.sum-card { background: var(--bg); border-radius: var(--radius-sm); padding: 12px 8px; text-align: center; }
-.sum-num { font-size: 22px; font-weight: 600; }
-.sum-lbl { font-size: 11px; color: var(--text3); margin-top: 2px; }
+/* 출력 */
+.sum-g{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}
+.sum-c{background:#F2F1ED;border-radius:6px;padding:11px 7px;text-align:center}
+.sum-n{font-size:20px;font-weight:600}
+.sum-l{font-size:11px;color:#8A8780;margin-top:2px}
+.dl-g{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 14px 0}
+.dl-btn{padding:12px 8px;background:#1F3864;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px}
+.dl-btn:active{opacity:.85}
+.dl-full{grid-column:span 2}
 
-/* 시작화면 */
-.start-banner {
-  margin: 0; padding: 28px 16px 16px;
-  background: linear-gradient(160deg, var(--accent) 0%, var(--accent2) 100%);
-  color: #fff;
-}
-.start-banner h2 { font-size: 22px; font-weight: 700; letter-spacing: -.01em; margin-bottom: 4px; }
-.start-banner p { font-size: 13px; opacity: .75; }
-.start-banner .docno-display { margin-top: 12px; font-size: 12px; opacity: .85; }
+/* 문서번호 */
+.docno-row{display:flex;align-items:center;gap:5px;background:#F2F1ED;border:.5px solid #D4D0C8;border-radius:6px;padding:7px 10px}
+.docno-pre{font-size:12px;color:#5A5750;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.docno-seq{width:48px;border:none;background:#E8E6E0;border-radius:4px;padding:3px 5px;font-size:14px;font-weight:600;text-align:center;color:#1F3864;font-family:inherit}
+.docno-seq:focus{outline:none;background:#fff}
 
-/* 히스토리 드롭다운 힌트 */
-.hist-hint {
-  font-size: 11px; color: var(--text3); margin-top: 4px; padding-left: 2px;
-}
+/* 리스트헤더 */
+.list-hd{font-size:11px;font-weight:600;color:#8A8780;text-transform:uppercase;letter-spacing:.07em;padding:13px 14px 5px}
 
 /* 토스트 */
-.toast {
-  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-  background: var(--text); color: #fff; padding: 10px 18px;
-  border-radius: 100px; font-size: 13px; font-weight: 500;
-  opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 9999;
-  white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,.2);
-}
-.toast.show { opacity: 1; }
-
-/* 섹션 구분 */
-.section-gap { height: 8px; }
-.list-header {
-  font-size: 11px; font-weight: 600; color: var(--text3);
-  text-transform: uppercase; letter-spacing: .07em;
-  padding: 14px 16px 6px;
-}
-
-/* 빈 상태 */
-.empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
-.empty-state .ei { font-size: 36px; margin-bottom: 10px; }
-.empty-state .et { font-size: 15px; font-weight: 500; color: var(--text2); margin-bottom: 5px; }
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1A1916;color:#fff;padding:9px 17px;border-radius:100px;font-size:13px;font-weight:500;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9999;white-space:nowrap}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- ① 시작 화면 -->
+<!-- 시작화면 -->
 <div id="sc-start" class="screen active">
-  <div class="start-banner">
+  <div class="banner">
     <h2>검측 시스템</h2>
-    <p>부위·공종을 선택하고 검측을 시작하세요</p>
-    <div class="docno-display" id="banner-docno"></div>
+    <p>공종·부위를 선택하고 검측을 시작하세요</p>
+    <div class="docno" id="banner-docno"></div>
   </div>
 
-  <!-- 빠른 시작 -->
-  <div class="card" style="margin-top:12px;border:1.5px solid var(--green)">
-    <div class="card-title" style="color:var(--green)">⚡ 빠른 시작 — 층만 선택하고 바로 사진</div>
-    <div style="display:flex;gap:8px;align-items:flex-end">
-      <div class="fld" style="width:90px">
-        <label>동 (선택)</label>
-        <select class="sel" id="sel-dong-quick"></select>
-      </div>
-      <div class="fld" style="width:90px">
-        <label>층 선택</label>
-        <select class="sel" id="sel-floor-quick"></select>
-      </div>
-      <div class="fld" style="flex:1">
-        <label>상세 부위 (선택)</label>
-        <select class="sel" id="sel-detail-quick"></select>
-      </div>
+  <!-- 빠른시작 -->
+  <div class="quick-card">
+    <div class="quick-t">⚡ 빠른 시작</div>
+    <div class="zone-row">
+      <div class="fld sm"><label>동</label><select id="q-dong"></select></div>
+      <div class="fld sm"><label>층</label><select id="q-floor"></select></div>
+      <div class="fld grow"><label>상세 부위</label><select id="q-detail"></select></div>
     </div>
-    <button onclick="quickStart()" style="width:100%;margin-top:10px;padding:12px;background:var(--green);color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">📷 사진 찍으러 바로 가기</button>
+    <button onclick="quickStart()" style="width:100%;margin-top:10px;padding:12px;background:#1D6A4A;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">📷 사진 찍으러 바로 가기</button>
   </div>
 
   <!-- 문서번호 -->
   <div class="card">
-    <div class="card-title">문서 번호</div>
+    <div class="card-t">문서 번호</div>
     <div class="docno-row">
-      <span class="prefix" id="docno-prefix-display">-</span>
-      <span>-</span>
-      <input class="seq" type="text" id="doc-seq" value="008" oninput="saveLS('docSeq',this.value);updateBanner()"/>
-      <span>호</span>
+      <span class="docno-pre" id="docno-pre-disp">-</span>
+      <span style="font-size:12px;color:#8A8780">-</span>
+      <input class="docno-seq" type="text" id="doc-seq" value="008" oninput="saveD('docSeq',this.value);updateBanner()"/>
+      <span style="font-size:12px;color:#8A8780">호</span>
     </div>
-    <div class="hist-hint">이전 번호에서 자동으로 이어집니다. 직접 수정 가능.</div>
-    <div class="add-row" style="margin-top:8px">
-      <input class="inp" type="text" id="docno-prefix-inp" placeholder="문서번호 앞부분" style="font-size:12px"/>
-      <button class="add-btn" onclick="saveDocPrefix()">저장</button>
+    <div class="add-row" style="margin-top:7px">
+      <input type="text" id="docno-pre-inp" placeholder="문서번호 앞부분 입력" style="font-size:12px"/>
+      <button class="add-btn" onclick="saveDocPre()">저장</button>
     </div>
   </div>
 
   <!-- 공사명 -->
   <div class="card">
-    <div class="card-title">공사명</div>
-    <select class="sel" id="sel-proj" onchange="onProjSelect()">
-      <option value="">선택 또는 직접 입력</option>
-    </select>
+    <div class="card-t">공사명</div>
+    <select id="sel-proj" onchange="saveD('lastProj',this.value)"></select>
     <div class="add-row">
-      <input class="inp" type="text" id="new-proj" placeholder="새 공사명 입력"/>
+      <input type="text" id="new-proj" placeholder="새 공사명 추가"/>
       <button class="add-btn" onclick="addProj()">+ 추가</button>
     </div>
   </div>
 
   <!-- 검측 부위 -->
   <div class="card">
-    <div class="card-title">검측 부위</div>
-    <div class="zone-row">
-      <div class="fld">
-        <label>동</label>
-        <select class="sel" id="sel-dong" style="width:80px" onchange="saveLSArr('dongs',this.value)">
-          <option value="">동</option>
-        </select>
-      </div>
-      <span class="zone-sep">동</span>
-      <div class="fld">
-        <label>층</label>
-        <select class="sel" id="sel-floor" style="width:80px"></select>
-      </div>
-      <div class="fld grow">
-        <label>상세 부위</label>
-        <select class="sel" id="sel-detail">
-          <option value="">선택 또는 직접 입력</option>
-        </select>
-      </div>
-    </div>
-    <div class="add-row" style="margin-top:8px">
-      <input class="inp" type="text" id="new-dong" placeholder="동 번호 추가 (예: 4021)"/>
-      <button class="add-btn" onclick="addDong()">+ 동 추가</button>
+    <div class="card-t">검측 부위</div>
+    <div class="zone-row" style="margin-bottom:8px">
+      <div class="fld sm"><label>동</label><select id="sel-dong"></select></div>
+      <div class="fld sm"><label>층</label><select id="sel-floor"></select></div>
+      <div class="fld grow"><label>상세 부위</label><select id="sel-detail"></select></div>
     </div>
     <div class="add-row">
-      <input class="inp" type="text" id="new-detail" placeholder="상세 부위 추가 (예: 외벽 W24구간)"/>
-      <button class="add-btn" onclick="addDetail()">+ 부위 추가</button>
+      <input type="text" id="new-dong" placeholder="동 추가 (예: 4021)"/>
+      <button class="add-btn" onclick="addDong()">+ 동</button>
+    </div>
+    <div class="add-row">
+      <input type="text" id="new-detail" placeholder="상세 부위 추가"/>
+      <button class="add-btn" onclick="addDetail()">+ 부위</button>
     </div>
   </div>
 
   <!-- 공종 -->
   <div class="card">
-    <div class="card-title">공종</div>
+    <div class="card-t">공종</div>
     <div class="fld" style="margin-bottom:8px">
       <label>공종</label>
-      <select class="sel" id="sel-gong" onchange="onGongChange()"></select>
+      <select id="sel-gong" onchange="onGongChange()"></select>
       <div class="add-row">
-        <input class="inp" type="text" id="new-gong" placeholder="새 공종 추가"/>
+        <input type="text" id="new-gong" placeholder="새 공종 추가"/>
         <button class="add-btn" onclick="addGong()">+ 추가</button>
       </div>
     </div>
     <div class="fld">
       <label>세부공종</label>
-      <select class="sel" id="sel-sub"></select>
+      <select id="sel-sub"></select>
       <div class="add-row">
-        <input class="inp" type="text" id="new-sub" placeholder="새 세부공종 추가"/>
+        <input type="text" id="new-sub" placeholder="새 세부공종 추가"/>
         <button class="add-btn" onclick="addSub()">+ 추가</button>
       </div>
     </div>
@@ -420,843 +210,699 @@ body {
 
   <!-- 담당자 -->
   <div class="card">
-    <div class="card-title">담당자</div>
+    <div class="card-t">담당자</div>
     <div class="g3" style="margin-bottom:8px">
-      <div class="fld">
-        <label>시공사 점검</label>
-        <select class="sel" id="sel-worker"></select>
-      </div>
-      <div class="fld">
-        <label>현장 대리인</label>
-        <select class="sel" id="sel-agent"></select>
-      </div>
-      <div class="fld">
-        <label>건축감리원</label>
-        <select class="sel" id="sel-sup"></select>
-      </div>
+      <div class="fld"><label>시공사 점검</label><select id="sel-worker"></select></div>
+      <div class="fld"><label>현장 대리인</label><select id="sel-agent"></select></div>
+      <div class="fld"><label>건축감리원</label><select id="sel-sup"></select></div>
     </div>
     <div class="add-row">
-      <select class="sel" id="person-role" style="width:110px">
+      <select id="person-role" style="width:108px">
         <option value="worker">시공사 점검</option>
         <option value="agent">현장 대리인</option>
         <option value="sup">건축감리원</option>
       </select>
-      <input class="inp" type="text" id="new-person" placeholder="이름 입력"/>
+      <input type="text" id="new-person" placeholder="이름"/>
       <button class="add-btn" onclick="addPerson()">+ 추가</button>
     </div>
   </div>
 
-  <div style="height:12px"></div>
-  <button class="btn-primary" onclick="startInspection();swTab('photo')" style="background:var(--green);margin-bottom:8px">📷 사진만 찍고 바로 시작</button>
-  <button class="btn-primary" onclick="startInspection()" style="background:var(--accent)">전체 정보 입력 후 시작 →</button>
-  <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:8px;padding:0 16px">나머지 정보는 사무실에서 웹으로 수정 가능</p>
-  <div style="height:16px"></div>
+  <div style="height:10px"></div>
+  <button class="btn" onclick="startInspection(false)">전체 정보 입력 후 시작 →</button>
+  <p style="text-align:center;font-size:11px;color:#8A8780;margin-top:8px">나머지 정보는 사무실에서 웹으로 수정 가능</p>
+  <div style="height:14px"></div>
 </div>
 
-<!-- ② 메인 (갑지 / 체크리스트 / 사진대지 / 출력) -->
+<!-- 메인화면 -->
 <div id="sc-main" class="screen">
   <div class="header">
-    <div class="header-row">
-      <div class="back-btn" onclick="sw('start')">←</div>
+    <div class="hrow">
+      <div class="back" onclick="goStart()">←</div>
       <div style="flex:1;min-width:0">
-        <div class="header h1" id="main-title" style="font-size:15px;font-weight:600">검측</div>
-        <div class="header-sub" id="main-sub"></div>
+        <div class="htitle" id="main-title">검측</div>
+        <div class="hsub" id="main-sub"></div>
       </div>
-      <button class="btn-sec" onclick="swTab('export')">출력</button>
+      <button class="btn-s" onclick="swTab('export')">출력</button>
     </div>
-    <div class="tab-bar" style="margin:8px -0px -12px;border:none">
-      <button class="tab-btn active" onclick="swTab('cover')">① 갑지</button>
-      <button class="tab-btn" onclick="swTab('check')">② 체크리스트</button>
-      <button class="tab-btn" onclick="swTab('photo')">③ 사진대지</button>
-      <button class="tab-btn" onclick="swTab('export')">④ 출력</button>
+    <div class="tabs" style="margin:8px -0 -12px;border:none">
+      <button class="tab on" onclick="swTab('cover')">① 갑지</button>
+      <button class="tab" onclick="swTab('check')">② 체크리스트</button>
+      <button class="tab" onclick="swTab('photo')">③ 사진대지</button>
+      <button class="tab" onclick="swTab('export')">④ 출력</button>
     </div>
   </div>
 
   <!-- 갑지 -->
   <div id="tab-cover" class="screen active">
-    <div class="section-gap"></div>
-    <div class="card">
-      <div class="card-title">검측 요청서 · 갑지</div>
-      <div class="form-preview" id="cv-preview"></div>
-    </div>
-    <div class="card" style="margin-top:8px">
-      <div class="card-title">검측 결과 통보서</div>
-      <div class="form-preview" id="cv-preview2"></div>
-    </div>
-    <div class="section-gap"></div>
+    <div style="height:10px"></div>
+    <div class="card"><div class="card-t">검측 요청서 · 갑지</div><div id="cv1"></div></div>
+    <div class="card" style="margin-top:8px"><div class="card-t">검측 결과 통보서</div><div id="cv2"></div></div>
+    <div style="height:10px"></div>
   </div>
 
   <!-- 체크리스트 -->
   <div id="tab-check" class="screen">
-    <div class="card" style="margin-top:12px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-        <div style="font-size:12px;color:var(--text2)" id="ck-stat">전체 적합 ✓</div>
-        <button class="btn-sec" onclick="resetAllOK()">전체 적합 초기화</button>
+    <div class="card" style="margin-top:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+        <div style="font-size:12px;color:#5A5750" id="ck-stat">전체 적합 ✓</div>
+        <button class="btn-s" onclick="resetOK()">전체 적합 초기화</button>
       </div>
-      <div class="prog-bar-wrap"><div class="prog-bar-fill" id="ck-prog" style="width:100%"></div></div>
-      <div style="font-size:11px;color:var(--text3);margin-top:5px">기본값: 전체 적합 · 부적합만 ✕ 로 바꾸세요</div>
+      <div class="prog"><div class="prog-fill" id="ck-prog" style="width:100%"></div></div>
+      <div style="font-size:11px;color:#8A8780;margin-top:5px">기본값: 전체 적합 · 부적합만 ✕ 로 바꾸세요</div>
     </div>
-    <div class="list-header">항목별 결과</div>
+    <div class="list-hd">항목별 결과</div>
     <div id="check-list"></div>
-    <div style="height:12px"></div>
+    <div style="height:10px"></div>
   </div>
 
   <!-- 사진대지 -->
   <div id="tab-photo" class="screen">
-    <div class="card" style="margin-top:12px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div class="card-title" style="margin:0">사진 첨부</div>
-        <button class="btn-sec" onclick="addSlot()">+ 사진 추가</button>
+    <div class="card" style="margin-top:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px">
+        <div class="card-t" style="margin:0">사진 첨부</div>
+        <button class="btn-s" onclick="addSlot()">+ 사진 추가</button>
       </div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:10px">사진을 찍거나 앨범에서 선택하세요. 캡션은 선택사항.</div>
+      <div style="font-size:11px;color:#8A8780;margin-bottom:9px">사진을 찍거나 앨범에서 선택하세요</div>
       <div class="photo-grid" id="photo-grid"></div>
     </div>
-    <div style="height:12px"></div>
+    <div style="height:10px"></div>
   </div>
 
   <!-- 출력 -->
   <div id="tab-export" class="screen">
-    <div class="card" style="margin-top:12px">
-      <div class="card-title">검측 현황</div>
-      <div class="sum-grid">
-        <div class="sum-card">
-          <div class="sum-num" id="ex-tot">0</div>
-          <div class="sum-lbl">전체 항목</div>
-        </div>
-        <div class="sum-card">
-          <div class="sum-num" style="color:var(--red)" id="ex-fail">0</div>
-          <div class="sum-lbl">부적합</div>
-        </div>
-        <div class="sum-card">
-          <div class="sum-num" style="color:var(--amber)" id="ex-ph">0</div>
-          <div class="sum-lbl">사진 수</div>
-        </div>
+    <div class="card" style="margin-top:10px">
+      <div class="card-t">검측 현황</div>
+      <div class="sum-g">
+        <div class="sum-c"><div class="sum-n" id="ex-tot">0</div><div class="sum-l">전체 항목</div></div>
+        <div class="sum-c"><div class="sum-n" style="color:#B02A2A" id="ex-fail">0</div><div class="sum-l">부적합</div></div>
+        <div class="sum-c"><div class="sum-n" style="color:#8A4E00" id="ex-ph">0</div><div class="sum-l">사진 수</div></div>
       </div>
     </div>
-
     <div class="card" style="margin-top:8px">
-      <div class="card-title">항목별 현황</div>
-      <div id="ex-preview"></div>
+      <div class="card-t">항목별 현황</div>
+      <div id="ex-prev"></div>
     </div>
-
-    <div class="dl-grid">
-      <button class="dl-btn" onclick="exportRequest()">📋 갑지 출력</button>
-      <button class="dl-btn" onclick="exportChecklist()">✅ 체크리스트</button>
+    <div class="dl-g">
+      <button class="dl-btn" onclick="expReq()">📋 갑지</button>
+      <button class="dl-btn" onclick="expCheck()">✅ 체크리스트</button>
     </div>
-    <div style="margin:8px 16px 0">
-      <button class="dl-btn full" onclick="exportPhoto()">📷 사진대지 출력</button>
+    <div style="margin:7px 14px 0">
+      <button class="dl-btn dl-full" onclick="expPhoto()">📷 사진대지</button>
     </div>
-    <div style="margin:8px 16px 0">
-      <button class="dl-btn full outline" onclick="exportAll()">⬇ 3종 한번에 출력</button>
+    <div style="margin:7px 14px 0">
+      <button class="dl-btn dl-full" style="background:none;border:1px solid #1F3864;color:#1F3864" onclick="expAll()">⬇ 3종 한번에 출력</button>
     </div>
-    <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:10px;padding:0 16px">
-      파일을 열어 인쇄 버튼 클릭 → 프린터 출력 또는 PDF 저장
-    </p>
-    <div style="height:12px"></div>
+    <div style="margin:7px 14px 0">
+      <button class="dl-btn dl-full" style="background:#1D6A4A" onclick="saveInspection()">☁️ 클라우드 저장 — 사무실에서 확인</button>
+    </div>
+    <p style="text-align:center;font-size:11px;color:#8A8780;margin-top:8px">파일 열어서 인쇄 → 프린터 또는 PDF 저장</p>
+    <div style="height:10px"></div>
   </div>
 </div>
 
-</div><!-- .app -->
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══════════════════════════════
-   로컬스토리지 기반 상태 관리
-════════════════════════════════ */
-function ls(k, def) {
-  try { const v = localStorage.getItem(k); return v !== null ? JSON.parse(v) : def; }
-  catch { return def; }
-}
-function saveLS(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+// ── 로컬스토리지 ──
+function ld(k,def){try{const v=localStorage.getItem(k);return v!==null?JSON.parse(v):def}catch{return def}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+function saveD(k,v){sv(k,v)}
 
-/* 기본 데이터 초기값 */
-const DEF = {
-  projs: ['화성동탄(2) A59블럭 공동주택 신축공사'],
-  dongs: ['4021', '4022', '4023'],
-  details: ['외벽 W24구간', '외벽 W23구간', '내벽', '계단실'],
-  gongs: {
-    '철근 콘크리트 공사': ['벽체 철근배근', '기초 철근배근', '슬라브 철근배근', '기둥 철근배근', '보 철근배근'],
-    '거푸집 공사': ['벽체 거푸집', '슬라브 거푸집', '기초 거푸집'],
-    '콘크리트 공사': ['벽체 타설', '슬라브 타설', '기초 타설'],
-    '마감 공사': ['바닥 미장', '타일 시공', '도장 공사', '창호 설치', '방수 시공'],
-    '토공사': ['터파기', '되메우기', '잡석 다짐'],
+// ── 기본값 ──
+const DEF={
+  projs:['화성동탄(2) A59블럭 공동주택 신축공사'],
+  dongs:['4021','4022','4023'],
+  details:['외벽 W24구간','외벽 W23구간','내벽','계단실'],
+  gongs:{
+    '철근 콘크리트 공사':['벽체 철근배근','기초 철근배근','슬라브 철근배근','기둥 철근배근','보 철근배근'],
+    '거푸집 공사':['벽체 거푸집','슬라브 거푸집','기초 거푸집'],
+    '콘크리트 공사':['벽체 타설','슬라브 타설','기초 타설'],
+    '마감 공사':['바닥 미장','타일 시공','도장 공사','창호 설치','방수 시공'],
+    '토공사':['터파기','되메우기','잡석 다짐'],
   },
-  people: { worker: ['배 성 원', '홍 길 동'], agent: ['윤 태 용', '김 현 수'], sup: ['윤 종 구', '이 은 범'] },
-  docPrefix: '동탄(2) A59BL-2024-4021동-(철근 콘크리트 공사)',
-  docSeq: '008',
-  lastProj: '', lastDong: '', lastFloor: '3F', lastDetail: '',
-  lastGong: '철근 콘크리트 공사', lastSub: '벽체 철근배근',
-  lastWorker: '', lastAgent: '', lastSup: '',
+  people:{worker:['배 성 원','홍 길 동'],agent:['윤 태 용','김 현 수'],sup:['윤 종 구','이 은 범']},
+  docPre:'동탄(2) A59BL-2024-4021동-(철근 콘크리트 공사)',
+  docSeq:'008',
 };
 
-const DEFAULT_ITEMS = {
-  '벽체 철근배근': [
-    {name:'철근의 규격, 수량, 간격은 적정한가?', std:'도면 및 시방서 기준'},
-    {name:'피복은 적정한가?', std:'구조체 40mm 이상'},
-    {name:'결속 및 이음길이는 적합한가?', std:'설계 기준 이상'},
-    {name:'폭고정근 및 간격재 위치·수량은 적정한가?', std:'도면 기준'},
-    {name:'교차부 철근 배근은 적정한가?', std:'도면 기준'},
-    {name:'정착길이는 확보되었는가?', std:'설계 기준 이상'},
-    {name:'개구부·Box주위 보강, 취약부 보강근 설치', std:'도면 기준'},
-    {name:'청소는 되었는가?', std:'이물질·물 없을 것'},
+const FLOORS=['B9F','B8F','B7F','B6F','B5F','B4F','B3F','B2F','B1F',
+  '1F','2F','3F','4F','5F','6F','7F','8F','9F','10F','11F','12F','13F',
+  '14F','15F','16F','17F','18F','19F','20F','21F','22F','23F','24F','25F',
+  '26F','27F','28F','29F','30F','31F','32F','33F','34F','35F'];
+
+const ITEMS={
+  '벽체 철근배근':[
+    {n:'철근의 규격, 수량, 간격은 적정한가?',s:'도면 및 시방서 기준'},
+    {n:'피복은 적정한가?',s:'구조체 40mm 이상'},
+    {n:'결속 및 이음길이는 적합한가?',s:'설계 기준 이상'},
+    {n:'폭고정근 및 간격재 위치·수량은 적정한가?',s:'도면 기준'},
+    {n:'교차부 철근 배근은 적정한가?',s:'도면 기준'},
+    {n:'정착길이는 확보되었는가?',s:'설계 기준 이상'},
+    {n:'개구부·Box주위 보강, 취약부 보강근 설치',s:'도면 기준'},
+    {n:'청소는 되었는가?',s:'이물질·물 없을 것'},
   ],
-  '기초 철근배근': [
-    {name:'철근 규격·수량·간격 적정', std:'도면 기준'},
-    {name:'피복 두께 확보', std:'기초 60mm 이상'},
-    {name:'이음 및 정착길이 확보', std:'설계 기준'},
-    {name:'청소 상태', std:'이물질 없을 것'},
+  '기초 철근배근':[
+    {n:'철근 규격·수량·간격 적정',s:'도면 기준'},
+    {n:'피복 두께 확보',s:'기초 60mm 이상'},
+    {n:'이음 및 정착길이 확보',s:'설계 기준'},
+    {n:'청소 상태',s:'이물질 없을 것'},
   ],
-  '슬라브 철근배근': [
-    {name:'상부근·하부근 간격 적정', std:'도면 기준'},
-    {name:'피복 두께 확보', std:'슬라브 20mm 이상'},
-    {name:'단부 정착 확보', std:'설계 기준'},
-    {name:'스페이서 설치', std:'도면 기준'},
-    {name:'청소 상태', std:'이물질 없을 것'},
-  ],
-  '기둥 철근배근': [
-    {name:'주근 규격·수량 적정', std:'도면 기준'},
-    {name:'띠철근 간격 적정', std:'도면 기준'},
-    {name:'피복 두께 확보', std:'기둥 40mm 이상'},
-    {name:'이음 위치 적정', std:'설계 기준'},
-  ],
-  '보 철근배근': [
-    {name:'주근 규격·수량 적정', std:'도면 기준'},
-    {name:'스터럽 간격 적정', std:'도면 기준'},
-    {name:'피복 두께 확보', std:'보 40mm 이상'},
-    {name:'정착길이 확보', std:'설계 기준'},
-  ],
-  '벽체 거푸집': [
-    {name:'거푸집 변형·틈새 없음', std:'허용 오차 이내'},
-    {name:'간격재 설치 적정', std:'도면 기준'},
-    {name:'청소 및 박리제 도포', std:'시방서 기준'},
-    {name:'동바리 설치 상태', std:'수직도 유지'},
-  ],
-  '벽체 타설': [
-    {name:'콘크리트 배합 적정', std:'설계 기준 강도 이상'},
-    {name:'타설 속도 적정', std:'거푸집 측압 허용 이내'},
-    {name:'진동기 다짐 적정', std:'시방서 기준'},
-    {name:'이어치기 위치 적정', std:'도면 기준'},
+  '슬라브 철근배근':[
+    {n:'상부근·하부근 간격 적정',s:'도면 기준'},
+    {n:'피복 두께 확보',s:'슬라브 20mm 이상'},
+    {n:'단부 정착 확보',s:'설계 기준'},
+    {n:'스페이서 설치',s:'도면 기준'},
+    {n:'청소 상태',s:'이물질 없을 것'},
   ],
 };
 
-/* 전역 상태 */
-let ST = {};
-let checkItems = [];
-let photos = [];
-let pidx = 0;
+// ── 전역 상태 ──
+let ST={};
+let chkItems=[];
+let photos=[];
+let pidx=0;
 
-/* ═══════════════════════════════
-   초기화
-════════════════════════════════ */
-function init() {
-  renderFloors();
-  renderProjSel();
-  renderDongSel();
-  renderDetailSel();
-  renderGongSel();
-  renderPeopleSel();
-  loadLastValues();
+// ── 셀렉트 채우기 공통 함수 ──
+function fillSel(id,opts,cur,placeholder){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.innerHTML='';
+  if(placeholder){const o=document.createElement('option');o.value='';o.textContent=placeholder;el.appendChild(o);}
+  opts.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o);});
+  if(cur)el.value=cur;
+}
+
+// ── 초기화 ──
+function init(){
+  // 층
+  const lastFloor=ld('lastFloor','3F');
+  fillSel('sel-floor',FLOORS,lastFloor,'층 선택');
+  fillSel('q-floor',FLOORS,lastFloor,'층 선택');
+
+  // 동
+  const dongs=ld('dongs',DEF.dongs);
+  const lastDong=ld('lastDong','');
+  fillSel('sel-dong',dongs,lastDong,'동 선택');
+  fillSel('q-dong',dongs,lastDong,'동 선택');
+
+  // 상세부위
+  const details=ld('details',DEF.details);
+  const lastDetail=ld('lastDetail','');
+  fillSel('sel-detail',details,lastDetail,'상세부위');
+  fillSel('q-detail',details,lastDetail,'상세부위');
+
+  // 공사명
+  const projs=ld('projs',DEF.projs);
+  fillSel('sel-proj',projs,ld('lastProj',''),'공사명 선택');
+
+  // 공종
+  const gongs=ld('gongs',DEF.gongs);
+  const lastGong=ld('lastGong','철근 콘크리트 공사');
+  fillSel('sel-gong',Object.keys(gongs),lastGong);
+  onGongChange();
+
+  // 담당자
+  const people=ld('people',DEF.people);
+  ['worker','agent','sup'].forEach(k=>{
+    fillSel('sel-'+k,people[k]||[],ld('last'+k,''));
+  });
+
+  // 문서번호
+  const pre=ld('docPre',DEF.docPre);
+  const seq=ld('docSeq',DEF.docSeq);
+  document.getElementById('doc-seq').value=seq;
+  document.getElementById('docno-pre-inp').value=pre;
+  document.getElementById('docno-pre-disp').textContent=pre;
   updateBanner();
-  document.getElementById('docno-prefix-inp').value = ls('docPrefix', DEF.docPrefix);
 }
 
-function renderFloors() {
-  const floors = ['B9F','B8F','B7F','B6F','B5F','B4F','B3F','B2F','B1F',
-    '1F','2F','3F','4F','5F','6F','7F','8F','9F','10F','11F','12F','13F',
-    '14F','15F','16F','17F','18F','19F','20F','21F','22F','23F','24F','25F',
-    '26F','27F','28F','29F','30F','31F','32F','33F','34F','35F'];
-  const lastFloor = ls('lastFloor', DEF.lastFloor) || '3F';
-  ['sel-floor', 'sel-floor-quick'].forEach(id => {
-    const sel = document.getElementById(id);
-    if (!sel) return;
-    sel.innerHTML = '<option value="">층 선택</option>';
-    floors.forEach(f => {
-      const o = document.createElement('option');
-      o.value = f; o.textContent = f; sel.appendChild(o);
-    });
-    sel.value = lastFloor;
-  });
+function updateBanner(){
+  const pre=ld('docPre',DEF.docPre);
+  const seq=document.getElementById('doc-seq')?.value||ld('docSeq',DEF.docSeq);
+  const el=document.getElementById('banner-docno');
+  if(el)el.textContent='문서번호: '+pre+'-'+seq+'호';
 }
 
-function renderProjSel() {
-  const projs = ls('projs', DEF.projs);
-  const sel = document.getElementById('sel-proj');
-  sel.innerHTML = '<option value="">선택하세요</option>';
-  projs.forEach(p => {
-    const o = document.createElement('option'); o.value = p; o.textContent = p; sel.appendChild(o);
-  });
-  sel.value = ls('lastProj', DEF.lastProj);
-}
-
-function renderDongSel() {
-  const dongs = ls('dongs', DEF.dongs);
-  const lastDong = ls('lastDong', DEF.lastDong);
-  ['sel-dong', 'sel-dong-quick'].forEach(id => {
-    const sel = document.getElementById(id);
-    if (!sel) return;
-    sel.innerHTML = '<option value="">동 선택</option>';
-    dongs.forEach(d => {
-      const o = document.createElement('option'); o.value = d; o.textContent = d; sel.appendChild(o);
-    });
-    sel.value = lastDong;
-  });
-}
-
-function renderDetailSel() {
-  const details = ls('details', DEF.details);
-  const lastDetail = ls('lastDetail', DEF.lastDetail);
-  ['sel-detail', 'sel-detail-quick'].forEach(id => {
-    const sel = document.getElementById(id);
-    if (!sel) return;
-    sel.innerHTML = '<option value="">상세부위 선택</option>';
-    details.forEach(d => {
-      const o = document.createElement('option'); o.value = d; o.textContent = d; sel.appendChild(o);
-    });
-    sel.value = lastDetail;
-  });
-}
-
-function renderGongSel() {
-  const gongs = ls('gongs', DEF.gongs);
-  const sel = document.getElementById('sel-gong');
-  const lastGong = ls('lastGong', DEF.lastGong);
-  sel.innerHTML = '';
-  Object.keys(gongs).forEach(g => {
-    const o = document.createElement('option'); o.value = g; o.textContent = g; sel.appendChild(o);
-  });
-  if (lastGong && gongs[lastGong]) sel.value = lastGong;
-  onGongChange();
-}
-
-function onGongChange() {
-  const gongs = ls('gongs', DEF.gongs);
-  const g = document.getElementById('sel-gong').value;
-  const subs = gongs[g] || [];
-  const sel = document.getElementById('sel-sub');
-  sel.innerHTML = '';
-  subs.forEach(s => {
-    const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o);
-  });
-  const lastSub = ls('lastSub', DEF.lastSub);
-  if (subs.includes(lastSub)) sel.value = lastSub;
-  saveLS('lastGong', g);
-}
-
-function renderPeopleSel() {
-  const people = ls('people', DEF.people);
-  ['worker','agent','sup'].forEach(k => {
-    const sel = document.getElementById('sel-'+k);
-    sel.innerHTML = '';
-    (people[k] || []).forEach(p => {
-      const o = document.createElement('option'); o.value = p; o.textContent = p; sel.appendChild(o);
-    });
-    const last = ls('last'+k.charAt(0).toUpperCase()+k.slice(1), DEF['last'+k.charAt(0).toUpperCase()+k.slice(1)]);
-    if (last) sel.value = last;
-  });
-}
-
-function loadLastValues() {
-  const lp = ls('lastProj', '');
-  if (lp) document.getElementById('sel-proj').value = lp;
-}
-
-/* ═══════════════════════════════
-   항목 추가
-════════════════════════════════ */
-function onProjSelect() {
-  saveLS('lastProj', document.getElementById('sel-proj').value);
-}
-
-function addProj() {
-  const v = document.getElementById('new-proj').value.trim();
-  if (!v) { toast('공사명을 입력하세요'); return; }
-  const projs = ls('projs', DEF.projs);
-  if (!projs.includes(v)) { projs.unshift(v); saveLS('projs', projs); }
-  document.getElementById('new-proj').value = '';
-  renderProjSel();
-  document.getElementById('sel-proj').value = v;
-  saveLS('lastProj', v);
-  toast('공사명 추가됨');
-}
-
-function addDong() {
-  const v = document.getElementById('new-dong').value.trim();
-  if (!v) { toast('동 번호를 입력하세요'); return; }
-  const dongs = ls('dongs', DEF.dongs);
-  if (!dongs.includes(v)) { dongs.unshift(v); saveLS('dongs', dongs); }
-  document.getElementById('new-dong').value = '';
-  renderDongSel();
-  document.getElementById('sel-dong').value = v;
-  toast('동 추가됨');
-}
-
-function addDetail() {
-  const v = document.getElementById('new-detail').value.trim();
-  if (!v) { toast('상세 부위를 입력하세요'); return; }
-  const details = ls('details', DEF.details);
-  if (!details.includes(v)) { details.unshift(v); saveLS('details', details); }
-  document.getElementById('new-detail').value = '';
-  renderDetailSel();
-  document.getElementById('sel-detail').value = v;
-  toast('부위 추가됨');
-}
-
-function addGong() {
-  const v = document.getElementById('new-gong').value.trim();
-  if (!v) { toast('공종을 입력하세요'); return; }
-  const gongs = ls('gongs', DEF.gongs);
-  if (!gongs[v]) gongs[v] = [];
-  saveLS('gongs', gongs);
-  document.getElementById('new-gong').value = '';
-  renderGongSel();
-  document.getElementById('sel-gong').value = v;
-  toast('공종 추가됨');
-}
-
-function addSub() {
-  const g = document.getElementById('sel-gong').value;
-  const v = document.getElementById('new-sub').value.trim();
-  if (!v) { toast('세부공종을 입력하세요'); return; }
-  const gongs = ls('gongs', DEF.gongs);
-  if (!gongs[g]) gongs[g] = [];
-  if (!gongs[g].includes(v)) gongs[g].unshift(v);
-  saveLS('gongs', gongs);
-  document.getElementById('new-sub').value = '';
-  onGongChange();
-  document.getElementById('sel-sub').value = v;
-  toast('세부공종 추가됨');
-}
-
-function addPerson() {
-  const role = document.getElementById('person-role').value;
-  const v = document.getElementById('new-person').value.trim();
-  if (!v) { toast('이름을 입력하세요'); return; }
-  const people = ls('people', DEF.people);
-  if (!people[role]) people[role] = [];
-  if (!people[role].includes(v)) people[role].unshift(v);
-  saveLS('people', people);
-  document.getElementById('new-person').value = '';
-  renderPeopleSel();
-  document.getElementById('sel-'+role).value = v;
-  toast('담당자 추가됨: ' + v);
-}
-
-function quickStart() {
-  const dong   = document.getElementById('sel-dong-quick').value;
-  const floor  = document.getElementById('sel-floor-quick').value;
-  const detail = document.getElementById('sel-detail-quick').value;
-  // 빠른시작 선택값을 메인 셀렉트에 반영 후 저장
-  document.getElementById('sel-dong').value   = dong;
-  document.getElementById('sel-floor').value  = floor;
-  document.getElementById('sel-detail').value = detail;
-  saveLS('lastDong', dong);
-  saveLS('lastFloor', floor);
-  saveLS('lastDetail', detail);
-  startInspection();
-  swTab('photo');
-}
-
-function syncQuickSelects() {
-  // render 함수들이 이미 양쪽 다 채우므로 별도 처리 불필요
-}
-
-
-  const v = document.getElementById('docno-prefix-inp').value.trim();
-  if (!v) return;
-  saveLS('docPrefix', v);
+function saveDocPre(){
+  const v=document.getElementById('docno-pre-inp').value.trim();
+  if(!v)return;
+  sv('docPre',v);
+  document.getElementById('docno-pre-disp').textContent=v;
   updateBanner();
   toast('문서번호 앞부분 저장됨');
 }
 
-function updateBanner() {
-  const prefix = ls('docPrefix', DEF.docPrefix);
-  const seq = document.getElementById('doc-seq')?.value || ls('docSeq', DEF.docSeq);
-  document.getElementById('docno-prefix-display').textContent = prefix;
-  document.getElementById('banner-docno').textContent = '문서번호: ' + prefix + '-' + seq + '호';
+// ── 항목 추가 ──
+function addProj(){
+  const v=document.getElementById('new-proj').value.trim();
+  if(!v){toast('공사명을 입력하세요');return;}
+  const list=ld('projs',DEF.projs);
+  if(!list.includes(v)){list.unshift(v);sv('projs',list);}
+  document.getElementById('new-proj').value='';
+  fillSel('sel-proj',list,v,'공사명 선택');
+  sv('lastProj',v);
+  toast('공사명 추가됨');
 }
 
-/* ═══════════════════════════════
-   검측 시작
-════════════════════════════════ */
-function startInspection() {
-  const dong   = document.getElementById('sel-dong').value;
-  const floor  = document.getElementById('sel-floor').value;
-  const detail = document.getElementById('sel-detail').value;
-  const gong   = document.getElementById('sel-gong').value;
-  const sub    = document.getElementById('sel-sub').value;
-  const proj   = document.getElementById('sel-proj').value;
-  const worker = document.getElementById('sel-worker').value;
-  const agent  = document.getElementById('sel-agent').value;
-  const sup    = document.getElementById('sel-sup').value;
-  const seq    = document.getElementById('doc-seq').value.trim();
-
-  // 필수 입력값 없음 — 빈칸은 사무실에서 수정 가능
-
-  // 마지막 선택값 저장
-  saveLS('lastProj', proj); saveLS('lastDong', dong); saveLS('lastFloor', floor);
-  saveLS('lastDetail', detail); saveLS('lastGong', gong); saveLS('lastSub', sub);
-  saveLS('lastWorker', worker); saveLS('lastAgent', agent); saveLS('lastSup', sup);
-  saveLS('docSeq', seq);
-
-  // 다음 번호 준비
-  const nextSeq = (parseInt(seq) + 1).toString().padStart(seq.length, '0');
-
-  ST = {
-    proj, dong, floor, detail, gong, sub, worker, agent, sup,
-    zone: [dong ? dong+'동' : '', floor, detail].filter(Boolean).join(' ') || '(부위 미입력)',
-    docPrefix: ls('docPrefix', DEF.docPrefix),
-    docSeq: seq,
-    docFull: ls('docPrefix', DEF.docPrefix) + '-' + seq + '호',
-    date: new Date().toISOString().split('T')[0],
-    nextSeq,
-  };
-
-  // 체크항목 세팅
-  const defs = DEFAULT_ITEMS[sub] || [];
-  checkItems = defs.map((d, i) => ({ id: i+1, name: d.name, std: d.std, result: 'O', note: '' }));
-
-  // 사진 초기화 (슬롯 2개)
-  photos = [{ id: pidx++, src: null, caption: '' }, { id: pidx++, src: null, caption: '' }];
-
-  fillCover();
-  renderCheck();
-  renderPhotos();
-  renderExport();
-
-  document.getElementById('main-title').textContent = ST.zone;
-  document.getElementById('main-sub').textContent = ST.gong + ' · ' + ST.sub + ' · ' + fmtDate(ST.date);
-
-  sw('main'); swTab('cover');
+function addDong(){
+  const v=document.getElementById('new-dong').value.trim();
+  if(!v){toast('동 번호를 입력하세요');return;}
+  const list=ld('dongs',DEF.dongs);
+  if(!list.includes(v)){list.unshift(v);sv('dongs',list);}
+  document.getElementById('new-dong').value='';
+  fillSel('sel-dong',list,v,'동 선택');
+  fillSel('q-dong',list,v,'동 선택');
+  sv('lastDong',v);
+  toast('동 추가됨: '+v);
 }
 
-/* ═══════════════════════════════
-   갑지
-════════════════════════════════ */
-function fillCover() {
-  const m = ST;
-  const fd = fmtDate(m.date);
-  document.getElementById('cv-preview').innerHTML = fpRows([
-    ['공 사 명', m.proj || '-'],
-    ['문서번호', m.docFull],
-    ['일 자', fd],
-    ['위치·공종', m.gong],
-    ['공종구분', '☐토목 ■건축 ☐기계 ☐전기 ☐통신 ☐소방 ☐조경'],
-    ['검측 부위', m.zone],
-    ['검측 사항', m.sub],
-    ['시공사점검', m.worker || '-'],
-    ['현장대리인', m.agent || '-'],
+function addDetail(){
+  const v=document.getElementById('new-detail').value.trim();
+  if(!v){toast('상세 부위를 입력하세요');return;}
+  const list=ld('details',DEF.details);
+  if(!list.includes(v)){list.unshift(v);sv('details',list);}
+  document.getElementById('new-detail').value='';
+  fillSel('sel-detail',list,v,'상세부위');
+  fillSel('q-detail',list,v,'상세부위');
+  sv('lastDetail',v);
+  toast('부위 추가됨');
+}
+
+function addGong(){
+  const v=document.getElementById('new-gong').value.trim();
+  if(!v){toast('공종을 입력하세요');return;}
+  const gongs=ld('gongs',DEF.gongs);
+  if(!gongs[v])gongs[v]=[];
+  sv('gongs',gongs);
+  document.getElementById('new-gong').value='';
+  fillSel('sel-gong',Object.keys(gongs),v);
+  onGongChange();
+  toast('공종 추가됨');
+}
+
+function addSub(){
+  const g=document.getElementById('sel-gong').value;
+  const v=document.getElementById('new-sub').value.trim();
+  if(!v){toast('세부공종을 입력하세요');return;}
+  const gongs=ld('gongs',DEF.gongs);
+  if(!gongs[g])gongs[g]=[];
+  if(!gongs[g].includes(v))gongs[g].unshift(v);
+  sv('gongs',gongs);
+  document.getElementById('new-sub').value='';
+  onGongChange();
+  document.getElementById('sel-sub').value=v;
+  toast('세부공종 추가됨');
+}
+
+function onGongChange(){
+  const g=document.getElementById('sel-gong').value;
+  const gongs=ld('gongs',DEF.gongs);
+  const subs=gongs[g]||[];
+  const lastSub=ld('lastSub','벽체 철근배근');
+  fillSel('sel-sub',subs,subs.includes(lastSub)?lastSub:subs[0]);
+  sv('lastGong',g);
+}
+
+function addPerson(){
+  const role=document.getElementById('person-role').value;
+  const v=document.getElementById('new-person').value.trim();
+  if(!v){toast('이름을 입력하세요');return;}
+  const people=ld('people',DEF.people);
+  if(!people[role])people[role]=[];
+  if(!people[role].includes(v))people[role].unshift(v);
+  sv('people',people);
+  document.getElementById('new-person').value='';
+  fillSel('sel-'+role,people[role],v);
+  toast('추가됨: '+v);
+}
+
+// ── 검측 시작 ──
+function quickStart(){
+  const dong=document.getElementById('q-dong').value;
+  const floor=document.getElementById('q-floor').value;
+  const detail=document.getElementById('q-detail').value;
+  // 메인 셀렉트에도 반영
+  document.getElementById('sel-dong').value=dong;
+  document.getElementById('sel-floor').value=floor;
+  document.getElementById('sel-detail').value=detail;
+  sv('lastDong',dong);sv('lastFloor',floor);sv('lastDetail',detail);
+  startInspection(true); // true = 사진탭으로
+}
+
+function startInspection(goPhoto){
+  const dong=document.getElementById('sel-dong').value;
+  const floor=document.getElementById('sel-floor').value;
+  const detail=document.getElementById('sel-detail').value;
+  const gong=document.getElementById('sel-gong').value;
+  const sub=document.getElementById('sel-sub').value;
+  const proj=document.getElementById('sel-proj').value;
+  const worker=document.getElementById('sel-worker').value;
+  const agent=document.getElementById('sel-agent').value;
+  const sup=document.getElementById('sel-sup').value;
+  const seq=document.getElementById('doc-seq').value.trim();
+
+  sv('lastDong',dong);sv('lastFloor',floor);sv('lastDetail',detail);
+  sv('lastGong',gong);sv('lastSub',sub);sv('lastProj',proj);
+  sv('lastworker',worker);sv('lastagent',agent);sv('lastsup',sup);
+  sv('docSeq',seq);
+
+  const nextSeq=(parseInt(seq)+1).toString().padStart(seq.length,'0');
+  const pre=ld('docPre',DEF.docPre);
+  const zone=[dong?dong+'동':'',floor,detail].filter(Boolean).join(' ')||'(부위 미입력)';
+
+  ST={proj,dong,floor,detail,gong,sub,worker,agent,sup,zone,
+    docPre:pre,docSeq:seq,docFull:pre+'-'+seq+'호',
+    date:new Date().toISOString().split('T')[0],nextSeq};
+
+  chkItems=(ITEMS[sub]||[]).map((d,i)=>({id:i+1,n:d.n,s:d.s,r:'O',note:''}));
+  photos=[{id:pidx++,src:null,cap:''},{id:pidx++,src:null,cap:''}];
+
+  fillCover();renderCheck();renderPhotos();renderExp();
+  document.getElementById('main-title').textContent=zone;
+  document.getElementById('main-sub').textContent=gong+(sub?' · '+sub:'')+(ST.date?' · '+fmtDate(ST.date):'');
+
+  goSc('main');
+  swTab(goPhoto?'photo':'cover');
+}
+
+function goStart(){goSc('start');}
+
+// ── 갑지 ──
+function fillCover(){
+  const m=ST;const fd=fmtDate(m.date);
+  document.getElementById('cv1').innerHTML=fpRows([
+    ['공 사 명',m.proj||'-'],['문서번호',m.docFull],['일 자',fd],
+    ['위치·공종',m.gong],['공종구분','☐토목 ■건축 ☐기계 ☐전기 ☐통신 ☐소방 ☐조경'],
+    ['검측 부위',m.zone],['검측 사항',m.sub||'-'],
+    ['시공사점검',m.worker||'-'],['현장대리인',m.agent||'-'],
   ]);
-  document.getElementById('cv-preview2').innerHTML = fpRows([
-    ['검측 일시', fd],
-    ['검측 의견', '&nbsp;'],
-    ['검측 결과', '☐ 적합 &nbsp; ☐ 조건부 적합 &nbsp; ☐ 재검측'],
-    ['감 리 원', m.sup || '-'],
+  document.getElementById('cv2').innerHTML=fpRows([
+    ['검측 일시',fd],['검측 의견','&nbsp;'],
+    ['검측 결과','☐ 적합 &nbsp; ☐ 조건부 적합 &nbsp; ☐ 재검측'],
+    ['감 리 원',m.sup||'-'],
   ]);
 }
-
-function fpRows(rows) {
-  return rows.map(([l, v]) =>
-    `<div class="fp-row"><div class="fp-lbl">${l}</div><div class="fp-val">${v}</div></div>`
-  ).join('');
+function fpRows(rows){
+  return rows.map(([l,v])=>`<div class="fp-row"><div class="fp-l">${l}</div><div class="fp-v">${v}</div></div>`).join('');
 }
 
-/* ═══════════════════════════════
-   체크리스트
-════════════════════════════════ */
-function renderCheck() {
-  const fail = checkItems.filter(i => i.result === 'X').length;
-  const ok   = checkItems.filter(i => i.result === 'O').length;
-  const pct  = checkItems.length ? Math.round(ok / checkItems.length * 100) : 100;
-  document.getElementById('ck-stat').textContent = fail === 0 ? '전체 적합 ✓' : `부적합 ${fail}건`;
-  document.getElementById('ck-prog').style.width = pct + '%';
-
-  if (!checkItems.length) {
-    document.getElementById('check-list').innerHTML =
-      `<div class="empty-state"><div class="ei">📋</div><div class="et">항목이 없습니다</div><div style="font-size:13px;color:var(--text3)">세부공종에 해당하는 기본 항목이 없어요</div></div>`;
+// ── 체크리스트 ──
+function renderCheck(){
+  const fail=chkItems.filter(i=>i.r==='X').length;
+  const ok=chkItems.filter(i=>i.r==='O').length;
+  const pct=chkItems.length?Math.round(ok/chkItems.length*100):100;
+  document.getElementById('ck-stat').textContent=fail===0?'전체 적합 ✓':'부적합 '+fail+'건';
+  document.getElementById('ck-prog').style.width=pct+'%';
+  if(!chkItems.length){
+    document.getElementById('check-list').innerHTML='<div style="text-align:center;padding:30px;color:#8A8780;font-size:13px">항목 없음</div>';
     return;
   }
-
-  document.getElementById('check-list').innerHTML = checkItems.map(item => `
-    <div class="ci ${item.result === 'X' ? 'fail' : ''}" id="ci-${item.id}">
-      <div class="ci-num">${item.id}</div>
+  document.getElementById('check-list').innerHTML=chkItems.map(item=>`
+    <div class="ci ${item.r==='X'?'fail':''}" id="ci-${item.id}">
+      <div class="ci-n">${item.id}</div>
       <div class="ci-body">
-        <div class="ci-name">${item.name}</div>
-        ${item.std ? `<div class="ci-std">${item.std}</div>` : ''}
-        ${item.result === 'X' ? `<textarea class="ci-note" placeholder="부적합 내용 및 조치사항" onchange="setNote(${item.id},this.value)">${item.note}</textarea>` : ''}
+        <div class="ci-name">${item.n}</div>
+        ${item.s?`<div class="ci-std">${item.s}</div>`:''}
+        ${item.r==='X'?`<textarea class="ci-note" placeholder="부적합 내용 및 조치사항" onchange="setNote(${item.id},this.value)">${item.note}</textarea>`:''}
       </div>
-      <div class="ox-wrap">
-        <button class="ox-btn ${item.result === 'O' ? 'ok' : ''}" onclick="setRes(${item.id},'O')">○</button>
-        <button class="ox-btn ${item.result === 'X' ? 'fail' : ''}" onclick="setRes(${item.id},'X')">✕</button>
+      <div class="ox">
+        <button class="ox-btn ${item.r==='O'?'ok':''}" onclick="setR(${item.id},'O')">○</button>
+        <button class="ox-btn ${item.r==='X'?'ng':''}" onclick="setR(${item.id},'X')">✕</button>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
-
-function setRes(id, v) {
-  const item = checkItems.find(i => i.id === id);
-  if (!item) return;
-  item.result = item.result === v ? 'O' : v; // 다시 누르면 적합으로
-  if (item.result === 'O') item.note = '';
-  renderCheck(); renderExport();
-  toast(item.result === 'O' ? '적합' : '부적합 표시');
+function setR(id,v){
+  const item=chkItems.find(i=>i.id===id);if(!item)return;
+  item.r=item.r===v?'O':v;if(item.r==='O')item.note='';
+  renderCheck();renderExp();toast(item.r==='O'?'적합':'부적합 표시');
 }
-function setNote(id, v) { const i = checkItems.find(x => x.id === id); if (i) i.note = v; }
-function resetAllOK() { checkItems.forEach(i => { i.result = 'O'; i.note = ''; }); renderCheck(); toast('전체 적합으로 초기화'); }
+function setNote(id,v){const i=chkItems.find(x=>x.id===id);if(i)i.note=v;}
+function resetOK(){chkItems.forEach(i=>{i.r='O';i.note='';});renderCheck();toast('전체 적합으로 초기화');}
 
-/* ═══════════════════════════════
-   사진대지
-════════════════════════════════ */
-function renderPhotos() {
-  document.getElementById('photo-grid').innerHTML = photos.map(p => `
+// ── 사진대지 ──
+function renderPhotos(){
+  document.getElementById('photo-grid').innerHTML=photos.map(p=>`
     <div>
-      <div class="photo-cell ${p.src ? 'filled' : ''}" id="ph-${p.id}">
+      <div class="pc ${p.src?'filled':''}" id="ph-${p.id}">
         ${p.src
-          ? `<img src="${p.src}"/><button class="photo-del" onclick="delPhoto(${p.id},event)">✕</button>`
-          : `<input type="file" accept="image/*" capture="environment" onchange="addPhoto(event,${p.id})"/>
-             <span class="pc-ico">📷</span><span class="pc-lbl">사진 촬영 / 선택</span>`
-        }
+          ?`<img src="${p.src}"/><button class="pc-del" onclick="delP(${p.id},event)">✕</button>`
+          :`<input type="file" accept="image/*" onchange="addP(event,${p.id})"/>
+            <span class="pc-ico">📷</span><span class="pc-lbl">사진 촬영 / 선택</span>`}
       </div>
-      <input class="photo-caption" type="text" placeholder="캡션 (선택)" value="${p.caption}" onchange="setCaption(${p.id},this.value)"/>
-    </div>
-  `).join('');
+      <input class="cap" type="text" placeholder="캡션 (선택)" value="${p.cap}" onchange="setCap(${p.id},this.value)"/>
+    </div>`).join('');
 }
-
-function addSlot() { photos.push({ id: pidx++, src: null, caption: '' }); renderPhotos(); }
-
-function addPhoto(e, id) {
-  const file = e.target.files[0]; if (!file) return;
-  const ph = photos.find(p => p.id === id); if (!ph) return;
-  const r = new FileReader();
-  r.onload = ev => {
-    ph.src = ev.target.result;
-    renderPhotos(); renderExport();
-    toast('사진 저장됨!');
-  };
+function addSlot(){photos.push({id:pidx++,src:null,cap:''});renderPhotos();}
+function addP(e,id){
+  const file=e.target.files[0];if(!file)return;
+  const ph=photos.find(p=>p.id===id);if(!ph)return;
+  const r=new FileReader();
+  r.onload=ev=>{ph.src=ev.target.result;renderPhotos();renderExp();toast('사진 저장됨!');};
   r.readAsDataURL(file);
 }
-
-function delPhoto(id, e) {
+function delP(id,e){
   e.stopPropagation();
-  const ph = photos.find(p => p.id === id); if (ph) ph.src = null;
-  renderPhotos(); renderExport();
+  const ph=photos.find(p=>p.id===id);if(ph)ph.src=null;
+  renderPhotos();renderExp();
 }
+function setCap(id,v){const p=photos.find(x=>x.id===id);if(p)p.cap=v;}
 
-function setCaption(id, v) { const p = photos.find(x => x.id === id); if (p) p.caption = v; }
-
-/* ═══════════════════════════════
-   출력 현황
-════════════════════════════════ */
-function renderExport() {
-  const fail = checkItems.filter(i => i.result === 'X').length;
-  const ph   = photos.filter(p => p.src).length;
-  document.getElementById('ex-tot').textContent  = checkItems.length;
-  document.getElementById('ex-fail').textContent = fail;
-  document.getElementById('ex-ph').textContent   = ph;
-
-  document.getElementById('ex-preview').innerHTML = checkItems.length
-    ? checkItems.map((item, i) => {
-        let badge = '<span class="badge badge-g">○ 적합</span>';
-        if (item.result === 'X') badge = '<span class="badge badge-r">✕ 부적합</span>';
-        return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:.5px solid var(--border)">
-          <span style="font-size:11px;color:var(--text3);width:18px">${i+1}</span>
-          <span style="font-size:12px;flex:1">${item.name}</span>
-          ${badge}
-        </div>`;
+// ── 출력 현황 ──
+function renderExp(){
+  const fail=chkItems.filter(i=>i.r==='X').length;
+  const ph=photos.filter(p=>p.src).length;
+  document.getElementById('ex-tot').textContent=chkItems.length;
+  document.getElementById('ex-fail').textContent=fail;
+  document.getElementById('ex-ph').textContent=ph;
+  document.getElementById('ex-prev').innerHTML=chkItems.length
+    ?chkItems.map((item,i)=>{
+        let badge='<span style="font-size:11px;padding:2px 8px;border-radius:100px;background:#E4F3EC;color:#1D6A4A;font-weight:500">○ 적합</span>';
+        if(item.r==='X')badge='<span style="font-size:11px;padding:2px 8px;border-radius:100px;background:#FDEAEA;color:#B02A2A;font-weight:500">✕ 부적합</span>';
+        return `<div style="display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:.5px solid #E8E6E0">
+          <span style="font-size:11px;color:#8A8780;width:16px">${i+1}</span>
+          <span style="font-size:12px;flex:1">${item.n}</span>${badge}</div>`;
       }).join('')
-    : '<div style="font-size:13px;color:var(--text3);padding:12px 0">항목 없음</div>';
+    :'<div style="font-size:13px;color:#8A8780;padding:10px 0">항목 없음</div>';
 }
 
-/* ═══════════════════════════════
-   날짜 포맷
-════════════════════════════════ */
-function fmtDate(d) {
-  if (!d) return '-';
-  const [y, m, dy] = d.split('-');
-  const days = ['일','월','화','수','목','금','토'];
-  const dt = new Date(d + 'T00:00:00'); // 시간대 버그 방지
+// ── 날짜 포맷 ──
+function fmtDate(d){
+  if(!d)return'-';
+  const [y,m,dy]=d.split('-');
+  const days=['일','월','화','수','목','금','토'];
+  const dt=new Date(d+'T00:00:00');
   return `${y}년 ${parseInt(m)}월 ${parseInt(dy)}일(${days[dt.getDay()]})`;
 }
 
-/* ═══════════════════════════════
-   화면 전환
-════════════════════════════════ */
-function sw(s) {
-  document.querySelectorAll('.screen').forEach(e => e.classList.remove('active'));
-  document.getElementById('sc-' + s).classList.add('active');
-  window.scrollTo(0, 0);
+// ── 화면 전환 ──
+function goSc(s){
+  document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));
+  document.getElementById('sc-'+s).classList.add('active');
+  window.scrollTo(0,0);
 }
-function swTab(t) {
-  document.querySelectorAll('.tab-btn').forEach((b, i) =>
-    b.classList.toggle('active', ['cover','check','photo','export'][i] === t)
-  );
-  ['cover','check','photo','export'].forEach(id => {
-    document.getElementById('tab-' + id).classList.toggle('active', id === t);
+function swTab(t){
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('on',['cover','check','photo','export'][i]===t));
+  ['cover','check','photo','export'].forEach(id=>{
+    document.getElementById('tab-'+id).classList.toggle('active',id===t);
   });
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
 }
 
-/* ═══════════════════════════════
-   출력 (HTML 파일 다운로드)
-════════════════════════════════ */
-function dlHTML(html, fname) {
-  const b = new Blob([html], { type: 'text/html;charset=utf-8' });
-  const u = URL.createObjectURL(b);
-  const a = document.createElement('a'); a.href = u; a.download = fname; a.click();
+// ── 출력 ──
+const PCSS=`@page{margin:15mm}*{box-sizing:border-box}body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:12px;color:#111;padding:16px}
+.pb{display:block;margin:0 auto 12px;padding:8px 22px;background:#1F3864;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit}
+@media print{.pb{display:none}body{padding:0}}table{width:100%;border-collapse:collapse}td,th{border:1px solid #999;padding:6px 9px;vertical-align:middle}
+.lbl{background:#f0f0f0;font-weight:600;text-align:center;width:90px}.sig{height:44px;text-align:center;font-size:11px;color:#555}.hr{border:none;border-top:2px double #666;margin:16px 0}`;
+
+function dlHTML(html,fname){
+  const b=new Blob([html],{type:'text/html;charset=utf-8'});
+  const u=URL.createObjectURL(b);
+  const a=document.createElement('a');a.href=u;a.download=fname;a.click();
   URL.revokeObjectURL(u);
 }
 
-const PRINT_CSS = `
-@page{margin:15mm} *{box-sizing:border-box}
-body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:12px;color:#111;padding:16px}
-.pb{display:block;margin:0 auto 12px;padding:8px 22px;background:#1F3864;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit}
-@media print{.pb{display:none}body{padding:0}}
-table{width:100%;border-collapse:collapse}
-td,th{border:1px solid #999;padding:6px 9px;vertical-align:middle}
-.lbl{background:#f0f0f0;font-weight:600;text-align:center;width:90px}
-.sig{height:44px;text-align:center;font-size:11px;color:#555}
-.hr{border:none;border-top:2px double #666;margin:16px 0}
-`;
-
-function exportRequest() {
-  const m = ST;
-  dlHTML(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>갑지</title>
-<style>${PRINT_CSS}
-@page{size:A4}
+function expReq(){
+  const m=ST;const fd=fmtDate(m.date);
+  dlHTML(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>갑지</title><style>${PCSS}@page{size:A4}
 h1{font-size:17px;font-weight:700;text-align:center;border:2px solid #111;padding:9px;letter-spacing:.2em;margin-bottom:14px}
-h3{font-weight:700;border-bottom:1.5px solid #111;padding-bottom:5px;margin:14px 0 9px}
-</style></head><body>
+h3{font-weight:700;border-bottom:1.5px solid #111;padding-bottom:5px;margin:14px 0 9px}</style></head><body>
 <button class="pb" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
 <div style="text-align:right;font-size:10px;color:#888;margin-bottom:4px">QF-C-S2307 | Rev. 01</div>
 <h1>검측 요청 및 결과 통보서</h1>
 <h3>■ 검측 요청서</h3>
 <table>
 <tr><td class="lbl">공 사 명</td><td colspan="3">${m.proj||'-'}</td></tr>
-<tr><td class="lbl">문서번호</td><td>${m.docFull}</td><td class="lbl">일 자</td><td>${fmtDate(m.date)}</td></tr>
+<tr><td class="lbl">문서번호</td><td>${m.docFull}</td><td class="lbl">일 자</td><td>${fd}</td></tr>
 <tr><td class="lbl">위치·공종</td><td colspan="3">${m.gong}</td></tr>
-<tr><td class="lbl">공종구분</td><td colspan="3">☐토목 &nbsp;■건축 &nbsp;☐기계 &nbsp;☐전기 &nbsp;☐통신 &nbsp;☐소방 &nbsp;☐조경</td></tr>
+<tr><td class="lbl">공종구분</td><td colspan="3">☐토목 ■건축 ☐기계 ☐전기 ☐통신 ☐소방 ☐조경</td></tr>
 <tr><td class="lbl">검측 부위</td><td colspan="3">${m.zone}</td></tr>
-<tr><td class="lbl">검측 사항</td><td colspan="3">${m.sub}</td></tr>
+<tr><td class="lbl">검측 사항</td><td colspan="3">${m.sub||'-'}</td></tr>
 </table>
 <p style="font-size:11px;color:#666;margin:8px 0 12px">첨 부 : 검측 체크리스트, 시험성과, 야장 및 도면, 공사참여자 실명부</p>
 <table><tr><td class="sig">시공사 점검직원 &nbsp;${m.worker||''}&nbsp; (서명)</td><td class="sig">현 장 대 리 인 &nbsp;${m.agent||''}&nbsp; (서명)</td></tr></table>
 <hr class="hr"/>
 <h3>■ 검측 결과 통보서</h3>
 <table>
-<tr><td class="lbl">검측 일시</td><td colspan="3">${fmtDate(m.date)}</td></tr>
+<tr><td class="lbl">검측 일시</td><td colspan="3">${fd}</td></tr>
 <tr><td class="lbl">검측 의견</td><td colspan="3" style="height:50px"></td></tr>
-<tr><td class="lbl">검측 결과</td><td colspan="3">☐ 적합 &nbsp;&nbsp; ☐ 조건부 적합 &nbsp;&nbsp; ☐ 재검측</td></tr>
+<tr><td class="lbl">검측 결과</td><td colspan="3">☐ 적합 &nbsp; ☐ 조건부 적합 &nbsp; ☐ 재검측</td></tr>
 <tr><td class="lbl">조치 요구</td><td colspan="3">☐ 조치결과 확인</td></tr>
 </table>
 <table style="margin-top:8px"><tr><td class="sig">건축감리원 &nbsp;${m.sup||''}&nbsp; (서명)</td><td class="sig">총괄감리원 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (서명)</td></tr></table>
-</body></html>`, `갑지_${m.zone}_${m.date}.html`);
-  // 다음 문서번호 자동 증가
-  document.getElementById('doc-seq').value = ST.nextSeq;
-  saveLS('docSeq', ST.nextSeq);
+</body></html>`,`갑지_${m.zone}_${m.date}.html`);
+  sv('docSeq',m.nextSeq);document.getElementById('doc-seq').value=m.nextSeq;
   toast('① 갑지 출력 완료');
 }
 
-function exportChecklist() {
-  const m = ST;
-  const rows = checkItems.map((item, i) => {
-    const mark  = item.result === 'O' ? '○' : item.result === 'X' ? '×' : '';
-    const color = item.result === 'O' ? '#1D6A4A' : item.result === 'X' ? '#B02A2A' : '#aaa';
-    const judge = item.result === 'O' ? '적합' : item.result === 'X' ? '부적합' : '';
-    return `<tr>
-      <td style="text-align:center;color:#888">${i+1}</td>
-      <td>${item.name}</td>
-      <td style="font-size:10px;color:#666">${item.std||''}</td>
-      <td style="text-align:center;font-size:15px;color:${color}">${mark}</td>
-      <td style="text-align:center"></td>
-      <td style="text-align:center;color:${color};font-size:11px">${judge}</td>
-      <td style="text-align:center"></td>
-      <td style="font-size:11px;color:#555">${item.note||''}</td>
-    </tr>`;
+function expCheck(){
+  const m=ST;
+  const rows=chkItems.map((item,i)=>{
+    const mark=item.r==='O'?'○':item.r==='X'?'×':'';
+    const color=item.r==='O'?'#1D6A4A':item.r==='X'?'#B02A2A':'#aaa';
+    return `<tr><td style="text-align:center;color:#888">${i+1}</td><td>${item.n}</td>
+    <td style="font-size:10px;color:#666">${item.s||''}</td>
+    <td style="text-align:center;font-size:15px;color:${color}">${mark}</td>
+    <td style="text-align:center"></td><td style="text-align:center;color:${color};font-size:11px">${item.r==='O'?'적합':item.r==='X'?'부적합':''}</td>
+    <td style="text-align:center"></td><td style="font-size:11px;color:#555">${item.note||''}</td></tr>`;
   }).join('');
-  dlHTML(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>체크리스트</title>
-<style>${PRINT_CSS}
-@page{size:A4 landscape}
+  dlHTML(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>체크리스트</title><style>${PCSS}@page{size:A4 landscape}
 h1{font-size:15px;font-weight:700;text-align:center;border:2px solid #111;padding:7px;letter-spacing:.15em;margin-bottom:10px}
-.info td{font-size:11px}
-th{background:#2E75B6;color:#fff;padding:5px 3px;text-align:center}
-tr:nth-child(even) td{background:#f7fbff}
-</style></head><body>
+th{background:#2E75B6;color:#fff;padding:5px 3px;text-align:center}tr:nth-child(even) td{background:#f7fbff}</style></head><body>
 <button class="pb" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
 <div style="text-align:right;font-size:10px;color:#888;margin-bottom:3px">QF-C-S2307 | Rev. 00</div>
 <h1>검측 Check List</h1>
-<table class="info" style="margin-bottom:10px">
+<table style="margin-bottom:10px">
 <tr><td class="lbl">1.구분</td><td>건 축</td><td class="lbl">2.검측일자</td><td>${fmtDate(m.date)}</td></tr>
-<tr><td class="lbl">3.공종</td><td>${m.gong}</td><td class="lbl">4.세부공종</td><td>${m.sub}</td></tr>
+<tr><td class="lbl">3.공종</td><td>${m.gong}</td><td class="lbl">4.세부공종</td><td>${m.sub||'-'}</td></tr>
 <tr><td class="lbl">5.위치·부위</td><td>${m.zone}</td><td class="lbl">6.관련도면</td><td></td></tr>
 </table>
-<table>
-<tr>
-<th style="width:32px">번호</th><th>검측내용</th><th style="width:110px">검사기준</th>
+<table><tr><th style="width:32px">번호</th><th>검측내용</th><th style="width:110px">검사기준</th>
 <th style="width:48px">1차<br>시공</th><th style="width:48px">1차<br>감리</th>
-<th style="width:48px">2차<br>시공</th><th style="width:48px">2차<br>감리</th>
-<th>조치사항</th>
-</tr>${rows}
-</table>
+<th style="width:48px">2차<br>시공</th><th style="width:48px">2차<br>감리</th><th>조치사항</th></tr>${rows}</table>
 <p style="font-size:10px;color:#777;margin:5px 0">※ O / X 표기</p>
 <div style="font-size:11px;margin:5px 0">기타 점검내용<div style="border:1px solid #ccc;height:36px;margin-top:3px"></div></div>
 <table style="margin-top:8px">
 <tr><td class="lbl">시공자</td><td>성명: ${m.worker||''} &nbsp;(서명) &nbsp;&nbsp; 일자: ${m.date}</td></tr>
 <tr><td class="lbl">감리원</td><td>성명: ${m.sup||''} &nbsp;(서명) &nbsp;&nbsp; 일자:</td></tr>
-</table>
-</body></html>`, `체크리스트_${m.zone}_${m.date}.html`);
+</table></body></html>`,`체크리스트_${m.zone}_${m.date}.html`);
   toast('② 체크리스트 출력 완료');
 }
 
-function exportPhoto() {
-  const m = ST;
-  const filled = photos.filter(p => p.src);
-  if (!filled.length) { toast('사진이 없습니다. 사진대지 탭에서 사진을 추가하세요'); return; }
-  const pages = [];
-  for (let i = 0; i < filled.length; i += 2) pages.push(filled.slice(i, i + 2));
-  const pHtml = pages.map(group => {
-    const cells = group.map(p => `<td style="width:50%;border:1px solid #aaa;vertical-align:top;padding:0">
+function expPhoto(){
+  const m=ST;
+  const filled=photos.filter(p=>p.src);
+  if(!filled.length){toast('사진이 없습니다');return;}
+  const pages=[];for(let i=0;i<filled.length;i+=2)pages.push(filled.slice(i,i+2));
+  const pHtml=pages.map(group=>{
+    const cells=group.map(p=>`<td style="width:50%;border:1px solid #aaa;vertical-align:top;padding:0">
       <table style="width:100%;border-collapse:collapse">
         <tr><td style="background:#f0f0f0;padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px;font-weight:600;width:52px">장 소</td><td style="padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px">${m.zone}</td></tr>
         <tr><td style="background:#f0f0f0;padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px;font-weight:600">일 시</td><td style="padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px">${fmtDate(m.date)}</td></tr>
-        <tr><td style="background:#f0f0f0;padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px;font-weight:600">내 용</td><td style="padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px">${p.caption || m.sub}</td></tr>
+        <tr><td style="background:#f0f0f0;padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px;font-weight:600">내 용</td><td style="padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px">${p.cap||m.sub||'-'}</td></tr>
         <tr><td colspan="2" style="padding:8px;text-align:center"><img src="${p.src}" style="max-width:100%;max-height:220px;object-fit:contain"/></td></tr>
-      </table>
-    </td>`).join('');
+      </table></td>`).join('');
     return `<div style="page-break-after:always"><table style="width:100%;border-collapse:collapse;border:2px solid #333"><tr>${cells}</tr></table></div>`;
   }).join('');
   dlHTML(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>사진대지</title>
-<style>
-@page{size:A4 landscape;margin:12mm}
-body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;padding:14px}
+<style>@page{size:A4 landscape;margin:12mm}body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;padding:14px}
 .pb{display:block;margin:0 auto 10px;padding:8px 22px;background:#1F3864;color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit}
-@media print{.pb{display:none}body{padding:0}}
-</style></head><body>
+@media print{.pb{display:none}body{padding:0}}</style></head><body>
 <button class="pb" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
 <div style="text-align:right;font-size:10px;color:#888;margin-bottom:3px">QF-C-S2307 | Rev. 01</div>
 <h2 style="text-align:center;font-size:15px;letter-spacing:.2em;border:2px solid #111;padding:7px;margin-bottom:10px">사 진 대 지</h2>
 <p style="font-size:11px;margin-bottom:10px"><strong>공사명:</strong> ${m.proj||'-'}</p>
-${pHtml}
-</body></html>`, `사진대지_${m.zone}_${m.date}.html`);
+${pHtml}</body></html>`,`사진대지_${m.zone}_${m.date}.html`);
   toast('③ 사진대지 출력 완료');
 }
 
-function exportAll() {
-  exportRequest();
-  setTimeout(() => exportChecklist(), 400);
-  setTimeout(() => exportPhoto(), 800);
+function expAll(){
+  expReq();
+  setTimeout(()=>expCheck(),400);
+  setTimeout(()=>expPhoto(),800);
 }
 
-/* ═══════════════════════════════
-   토스트
-════════════════════════════════ */
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2400);
+// ── 토스트 ──
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2400);
 }
 
-/* ── 실행 ── */
+// ── Supabase 연결 ──
+const SUPA_URL = 'https://vztrzaenlwhlrwiezpqv.supabase.co';
+const SUPA_KEY = 'sb_publishable_i63qpuTeOT-JaXqlr5E6Tg_7pAcSn4Z';
+let supa = null;
+
+async function initSupa() {
+  try {
+    const { createClient } = supabase;
+    supa = createClient(SUPA_URL, SUPA_KEY);
+  } catch(e) {
+    console.log('Supabase 초기화 실패:', e);
+  }
+}
+
+// ── 검측 저장 ──
+async function saveInspection() {
+  if (!supa) { toast('DB 연결 안됨'); return; }
+  try {
+    toast('저장 중...');
+    const { data, error } = await supa.from('inspections').insert([{
+      proj: ST.proj || '',
+      zone: ST.zone || '',
+      dong: ST.dong || '',
+      floor: ST.floor || '',
+      detail: ST.detail || '',
+      gong: ST.gong || '',
+      sub: ST.sub || '',
+      worker: ST.worker || '',
+      agent: ST.agent || '',
+      sup: ST.sup || '',
+      doc_no: ST.docFull || '',
+      date: ST.date || '',
+      check_items: chkItems,
+      photos: photos.map(p => ({ cap: p.cap, src: p.src })),
+      status: '작성중'
+    }]).select();
+    if (error) throw error;
+    ST.dbId = data[0].id;
+    toast('☁️ 저장 완료! 사무실에서 확인 가능해요');
+  } catch(e) {
+    toast('저장 실패: ' + e.message);
+  }
+}
+
+// ── 검측 목록 불러오기 ──
+async function loadInspections() {
+  if (!supa) return [];
+  try {
+    const { data, error } = await supa
+      .from('inspections')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(20);
+    if (error) throw error;
+    return data || [];
+  } catch(e) {
+    return [];
+  }
+}
+
+// ── 실행 ──
 init();
-syncQuickSelects();
+initSupa();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Supabase 라이브러리 로드 후 재초기화
+window.addEventListener('load', () => {
+  if (typeof supabase !== 'undefined') {
+    const { createClient } = supabase;
+    supa = createClient(SUPA_URL, SUPA_KEY);
+    console.log('Supabase 연결됨');
+  }
+});
 </script>
 </body>
 </html>
