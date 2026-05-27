@@ -3,75 +3,93 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>검측 관리 — 사무실용</title>
+<title>검측 관리 시스템 — 사무실용</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#F2F1ED;color:#1A1916;font-size:14px}
-.wrap{max-width:1100px;margin:0 auto;padding:20px}
 
-/* 헤더 */
-.header{background:#1F3864;color:#fff;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;border-radius:10px}
-.header h1{font-size:18px;font-weight:700}
-.header p{font-size:12px;opacity:.7;margin-top:2px}
-.header-right{font-size:12px;opacity:.8;text-align:right}
+/* 레이아웃 */
+.top-bar{background:#1F3864;color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.top-bar h1{font-size:17px;font-weight:700}
+.top-bar-right{font-size:12px;opacity:.75;text-align:right}
+.page-tabs{display:flex;background:#fff;border-bottom:.5px solid #D4D0C8;padding:0 16px}
+.page-tab{padding:12px 18px;font-size:13px;font-weight:500;background:none;border:none;border-bottom:2.5px solid transparent;cursor:pointer;color:#8A8780;font-family:inherit}
+.page-tab.on{color:#1F3864;border-bottom-color:#1F3864}
+.page{display:none;max-width:1100px;margin:0 auto;padding:20px}
+.page.on{display:block}
+
+/* 공통 카드 */
+.card{background:#fff;border:.5px solid #D4D0C8;border-radius:10px;padding:16px;margin-bottom:14px}
+.card-t{font-size:11px;font-weight:600;color:#8A8780;text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px}
 
 /* 통계 */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
 .stat{background:#fff;border:.5px solid #D4D0C8;border-radius:10px;padding:16px;text-align:center}
 .stat-n{font-size:28px;font-weight:700;color:#1F3864}
 .stat-l{font-size:12px;color:#8A8780;margin-top:3px}
 
-/* 필터 */
-.filter-bar{background:#fff;border:.5px solid #D4D0C8;border-radius:10px;padding:14px 16px;margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+/* 필터바 */
+.filter-bar{background:#fff;border:.5px solid #D4D0C8;border-radius:10px;padding:12px 14px;margin-bottom:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .filter-bar input,.filter-bar select{padding:7px 10px;font-size:13px;background:#F2F1ED;border:.5px solid #D4D0C8;border-radius:6px;color:#1A1916;font-family:inherit}
-.filter-bar input{flex:1;min-width:200px}
-.btn-refresh{padding:7px 14px;background:#1F3864;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap}
-.btn-refresh:hover{opacity:.85}
+.filter-bar input{flex:1;min-width:180px}
+
+/* 버튼 */
+.btn{padding:8px 16px;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit;font-weight:500}
+.btn-primary{background:#1F3864;color:#fff}
+.btn-primary:hover{opacity:.85}
+.btn-green{background:#1D6A4A;color:#fff}
+.btn-green:hover{opacity:.85}
+.btn-sec{background:#F2F1ED;color:#1A1916;border:.5px solid #D4D0C8}
+.btn-sec:hover{background:#E8E6E0}
+.btn-red{background:none;border:1px solid #E08080;color:#B02A2A}
+.btn-red:hover{background:#FFF5F5}
+.btn-full{width:100%;padding:12px;font-size:14px}
 
 /* 테이블 */
-.table-wrap{background:#fff;border:.5px solid #D4D0C8;border-radius:10px;overflow:hidden;margin-bottom:20px}
+.tbl-wrap{background:#fff;border:.5px solid #D4D0C8;border-radius:10px;overflow:hidden;margin-bottom:18px}
 table{width:100%;border-collapse:collapse}
-th{background:#F2F1ED;padding:11px 14px;font-size:12px;font-weight:600;color:#5A5750;text-align:left;border-bottom:.5px solid #D4D0C8;white-space:nowrap}
-td{padding:12px 14px;font-size:13px;border-bottom:.5px solid #F2F1ED;vertical-align:middle}
+th{background:#F2F1ED;padding:10px 14px;font-size:12px;font-weight:600;color:#5A5750;text-align:left;border-bottom:.5px solid #D4D0C8;white-space:nowrap}
+td{padding:11px 14px;font-size:13px;border-bottom:.5px solid #F2F1ED;vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:#F8F7F4;cursor:pointer}
+tr.clickable:hover td{background:#F8F7F4;cursor:pointer}
+.empty{text-align:center;padding:36px;color:#8A8780;font-size:13px}
+
+/* 배지 */
 .badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:100px;font-size:11px;font-weight:500}
 .badge-g{background:#E4F3EC;color:#1D6A4A}
 .badge-r{background:#FDEAEA;color:#B02A2A}
 .badge-b{background:#E8EEF8;color:#1F3864}
-.empty{text-align:center;padding:40px;color:#8A8780;font-size:13px}
 
 /* 모달 */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
 .modal-bg.open{display:flex}
-.modal{background:#fff;border-radius:12px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;margin:auto}
-.modal-hd{padding:18px 20px;border-bottom:.5px solid #D4D0C8;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
+.modal{background:#fff;border-radius:12px;width:100%;max-width:800px;max-height:90vh;overflow-y:auto;margin:auto}
+.modal-hd{padding:16px 20px;border-bottom:.5px solid #D4D0C8;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1}
 .modal-hd h2{font-size:16px;font-weight:600}
-.modal-close{width:30px;height:30px;border-radius:50%;background:#F2F1ED;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.modal-close{width:28px;height:28px;border-radius:50%;background:#F2F1ED;border:none;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
 .modal-body{padding:20px}
-
-/* 모달 탭 */
 .m-tabs{display:flex;border-bottom:.5px solid #D4D0C8;margin-bottom:16px}
-.m-tab{padding:9px 16px;font-size:13px;font-weight:500;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:#8A8780}
+.m-tab{padding:9px 16px;font-size:13px;font-weight:500;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:#8A8780;font-family:inherit}
 .m-tab.on{color:#1F3864;border-bottom-color:#1F3864}
 .m-pane{display:none}.m-pane.on{display:block}
 
 /* 폼 */
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
 .fld{display:flex;flex-direction:column;gap:4px}
 .fld label{font-size:11px;color:#5A5750;font-weight:500}
 .fld input,.fld select,.fld textarea{padding:8px 10px;font-size:13px;background:#F2F1ED;border:.5px solid #D4D0C8;border-radius:6px;color:#1A1916;font-family:inherit}
-.fld textarea{resize:vertical;min-height:60px}
+.fld textarea{resize:vertical;min-height:56px}
 .fld.full{grid-column:span 2}
 
-/* 체크리스트 */
-.ck-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:.5px solid #D4D0C8;border-radius:6px;margin-bottom:6px}
+/* 체크리스트 편집 */
+.ck-item{display:flex;align-items:center;gap:8px;padding:9px 11px;border:.5px solid #D4D0C8;border-radius:6px;margin-bottom:6px;background:#fff}
 .ck-item.fail{border-color:#E08080;background:#FFF5F5}
-.ck-num{font-size:11px;color:#8A8780;width:18px;margin-top:2px;flex-shrink:0}
-.ck-body{flex:1}
+.ck-num{font-size:11px;color:#8A8780;width:20px;text-align:right;flex-shrink:0}
+.ck-body{flex:1;min-width:0}
 .ck-name{font-size:13px;font-weight:500}
-.ck-std{font-size:11px;color:#8A8780;margin-top:2px}
-.ck-note{width:100%;margin-top:6px;padding:5px 8px;font-size:12px;border:.5px solid #E08080;border-radius:6px;font-family:inherit;resize:none;height:30px}
+.ck-std{font-size:11px;color:#8A8780;margin-top:1px}
+.ck-note{width:100%;margin-top:5px;padding:5px 8px;font-size:12px;border:.5px solid #E08080;border-radius:6px;font-family:inherit;resize:none;height:28px}
 .ox{display:flex;gap:4px;flex-shrink:0}
 .ox-btn{width:34px;height:30px;border-radius:6px;border:.5px solid #D4D0C8;background:#F2F1ED;font-size:13px;cursor:pointer}
 .ox-btn.ok{background:#E4F3EC;border-color:#6DBD9A;color:#1D6A4A}
@@ -79,89 +97,116 @@ tr:hover td{background:#F8F7F4;cursor:pointer}
 
 /* 사진 */
 .photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.photo-item img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;border:.5px solid #D4D0C8}
+.photo-item img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;border:.5px solid #D4D0C8;cursor:pointer}
 .photo-cap{font-size:11px;color:#5A5750;margin-top:4px;text-align:center}
-.no-photo{text-align:center;padding:30px;color:#8A8780;font-size:13px}
 
-/* 출력 버튼 */
-.print-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
-.print-btn{padding:11px;background:#1F3864;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit}
+/* 공종 관리 */
+.gong-grid{display:grid;grid-template-columns:280px 1fr;gap:14px;min-height:500px}
+.gong-list{background:#fff;border:.5px solid #D4D0C8;border-radius:10px;overflow:hidden}
+.gong-list-hd{padding:12px 14px;border-bottom:.5px solid #D4D0C8;display:flex;align-items:center;justify-content:space-between;background:#F2F1ED}
+.gong-list-hd span{font-size:12px;font-weight:600;color:#5A5750}
+.gong-item{padding:11px 14px;border-bottom:.5px solid #F2F1ED;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:space-between}
+.gong-item:last-child{border-bottom:none}
+.gong-item.active{background:#E8EEF8;color:#1F3864;font-weight:500}
+.gong-item:hover:not(.active){background:#F8F7F4}
+.gong-del{padding:2px 7px;background:none;border:.5px solid #D4D0C8;border-radius:4px;font-size:11px;cursor:pointer;color:#8A8780;opacity:0}
+.gong-item:hover .gong-del{opacity:1}
+.gong-detail{background:#fff;border:.5px solid #D4D0C8;border-radius:10px;padding:16px}
+
+/* 서브 공종 */
+.sub-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:.5px solid #D4D0C8;border-radius:6px;margin-bottom:6px;cursor:pointer}
+.sub-item.active{border-color:#1F3864;background:#F0F4FB}
+.sub-item:hover:not(.active){background:#F8F7F4}
+.sub-name{font-size:13px;font-weight:500}
+.sub-cnt{font-size:11px;color:#8A8780}
+
+/* 체크 항목 편집 */
+.ck-edit-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border:.5px solid #D4D0C8;border-radius:6px;margin-bottom:5px;background:#fff}
+.ck-edit-item input{flex:1;padding:5px 8px;font-size:12px;background:#F2F1ED;border:.5px solid #D4D0C8;border-radius:4px;font-family:inherit}
+.ck-edit-item input:last-of-type{width:140px;flex:none}
+.drag-handle{cursor:grab;color:#C4C0B6;font-size:14px;flex-shrink:0}
+
+/* 업로드 존 */
+.upload-zone{border:2px dashed #C4C0B6;border-radius:10px;padding:32px;text-align:center;cursor:pointer;transition:background .15s;position:relative}
+.upload-zone:hover{background:#F8F7F4}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-zone .ui{font-size:32px;margin-bottom:10px}
+.upload-zone p{font-size:13px;color:#5A5750}
+.upload-zone small{font-size:11px;color:#8A8780;margin-top:4px;display:block}
+
+/* 파싱 결과 */
+.parse-result{margin-top:14px}
+.parse-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border:.5px solid #D4D0C8;border-radius:6px;margin-bottom:5px}
+.parse-row input[type=checkbox]{width:16px;height:16px;flex-shrink:0}
+.parse-row span{font-size:13px;flex:1}
+.parse-row .parse-std{font-size:11px;color:#8A8780;width:160px;flex-shrink:0}
+
+/* 출력 */
+.print-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+.print-btn{padding:12px;background:#1F3864;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit}
 .print-btn:hover{opacity:.85}
 .print-btn.green{background:#1D6A4A}
 .print-btn.full{grid-column:span 3}
 
-/* 저장 버튼 */
-.save-btn{width:100%;padding:12px;background:#1F3864;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:14px}
-.save-btn:hover{opacity:.85}
-
-/* 삭제 버튼 */
-.del-btn{padding:8px 14px;background:none;border:1px solid #E08080;color:#B02A2A;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit}
-.del-btn:hover{background:#FFF5F5}
-
-.loading{text-align:center;padding:40px;color:#8A8780}
-.spinner{display:inline-block;width:20px;height:20px;border:2px solid #D4D0C8;border-top-color:#1F3864;border-radius:50%;animation:spin .7s linear infinite;margin-right:8px}
+/* 로딩 */
+.loading{text-align:center;padding:36px;color:#8A8780}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid #D4D0C8;border-top-color:#1F3864;border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* 반응형 */
-@media(max-width:600px){
+@media(max-width:700px){
   .stats{grid-template-columns:repeat(2,1fr)}
-  .form-grid{grid-template-columns:1fr}
+  .gong-grid{grid-template-columns:1fr}
+  .fg2,.fg3{grid-template-columns:1fr}
   .fld.full{grid-column:span 1}
-  .photo-grid{grid-template-columns:repeat(2,1fr)}
-  .print-btns{grid-template-columns:1fr}
+  .photo-grid{grid-template-columns:1fr 1fr}
+  .print-grid{grid-template-columns:1fr}
   .print-btn.full{grid-column:span 1}
 }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="header">
-    <div>
-      <h1>검측 관리 시스템</h1>
-      <p>사무실용 — 현장 데이터 확인 · 수정 · 출력</p>
-    </div>
-    <div class="header-right">
-      <div id="conn-status">연결 중...</div>
-      <div id="today-date"></div>
-    </div>
-  </div>
 
-  <!-- 통계 -->
+<div class="top-bar">
+  <div>
+    <h1>검측 관리 시스템</h1>
+    <div style="font-size:11px;opacity:.7;margin-top:2px">사무실용 — 현장 데이터 확인 · 수정 · 공종 관리 · 출력</div>
+  </div>
+  <div class="top-bar-right">
+    <div id="conn-st">연결 중...</div>
+    <div id="today-dt"></div>
+  </div>
+</div>
+
+<!-- 페이지 탭 -->
+<div class="page-tabs">
+  <button class="page-tab on" onclick="swPage('list')">📋 검측 목록</button>
+  <button class="page-tab" onclick="swPage('gong')">⚙️ 공종 관리</button>
+</div>
+
+<!-- ① 검측 목록 페이지 -->
+<div id="page-list" class="page on">
   <div class="stats">
-    <div class="stat"><div class="stat-n" id="st-total">-</div><div class="stat-l">전체 검측</div></div>
+    <div class="stat"><div class="stat-n" id="st-tot">-</div><div class="stat-l">전체 검측</div></div>
     <div class="stat"><div class="stat-n" id="st-today">-</div><div class="stat-l">오늘 검측</div></div>
     <div class="stat"><div class="stat-n" style="color:#B02A2A" id="st-fail">-</div><div class="stat-l">부적합 포함</div></div>
     <div class="stat"><div class="stat-n" style="color:#1D6A4A" id="st-done">-</div><div class="stat-l">완료</div></div>
   </div>
-
-  <!-- 필터 -->
   <div class="filter-bar">
-    <input type="text" id="search" placeholder="🔍 공사명, 부위, 공종으로 검색..." oninput="filterList()"/>
-    <select id="filter-status" onchange="filterList()">
+    <input type="text" id="kw" placeholder="🔍 공사명, 부위, 공종 검색..." oninput="filterList()"/>
+    <select id="flt-status" onchange="filterList()">
       <option value="">전체 상태</option>
       <option value="작성중">작성중</option>
       <option value="완료">완료</option>
     </select>
-    <select id="filter-gong" onchange="filterList()">
-      <option value="">전체 공종</option>
-    </select>
-    <button class="btn-refresh" onclick="loadList()">🔄 새로고침</button>
+    <button class="btn btn-primary" onclick="loadList()">🔄 새로고침</button>
   </div>
-
-  <!-- 목록 -->
-  <div class="table-wrap">
+  <div class="tbl-wrap">
     <table>
-      <thead>
-        <tr>
-          <th>날짜</th>
-          <th>부위</th>
-          <th>공종 / 세부공종</th>
-          <th>검측자</th>
-          <th>체크 현황</th>
-          <th>사진</th>
-          <th>상태</th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th>날짜</th><th>부위</th><th>공종 / 세부공종</th>
+        <th>검측자</th><th>체크 현황</th><th>사진</th><th>상태</th>
+      </tr></thead>
       <tbody id="list-body">
         <tr><td colspan="7" class="loading"><span class="spinner"></span>불러오는 중...</td></tr>
       </tbody>
@@ -169,14 +214,38 @@ tr:hover td{background:#F8F7F4;cursor:pointer}
   </div>
 </div>
 
-<!-- 상세 모달 -->
-<div class="modal-bg" id="modal">
+<!-- ② 공종 관리 페이지 -->
+<div id="page-gong" class="page">
+  <div style="display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap">
+    <h2 style="font-size:16px;font-weight:600;flex:1">공종 · 세부공종 · 체크리스트 관리</h2>
+    <button class="btn btn-green" onclick="openUploadModal()">📂 파일 업로드로 항목 추가</button>
+  </div>
+  <div class="gong-grid">
+    <!-- 공종 목록 -->
+    <div>
+      <div class="gong-list">
+        <div class="gong-list-hd">
+          <span>공종 목록</span>
+          <button class="btn btn-primary" style="padding:5px 10px;font-size:12px" onclick="addGong()">+ 공종 추가</button>
+        </div>
+        <div id="gong-list-body"></div>
+      </div>
+    </div>
+    <!-- 공종 상세 -->
+    <div class="gong-detail" id="gong-detail">
+      <div style="text-align:center;padding:40px;color:#8A8780;font-size:13px">왼쪽에서 공종을 선택하세요</div>
+    </div>
+  </div>
+</div>
+
+<!-- 검측 상세 모달 -->
+<div class="modal-bg" id="rec-modal">
   <div class="modal">
     <div class="modal-hd">
       <h2 id="modal-title">검측 상세</h2>
       <div style="display:flex;gap:8px;align-items:center">
-        <button class="del-btn" onclick="deleteRecord()">삭제</button>
-        <button class="modal-close" onclick="closeModal()">✕</button>
+        <button class="btn btn-red" style="padding:6px 12px;font-size:12px" onclick="delRec()">삭제</button>
+        <button class="modal-close" onclick="closeModal('rec-modal')">✕</button>
       </div>
     </div>
     <div class="modal-body">
@@ -186,10 +255,9 @@ tr:hover td{background:#F8F7F4;cursor:pointer}
         <button class="m-tab" onclick="swMTab('photo')">📷 사진</button>
         <button class="m-tab" onclick="swMTab('print')">📄 출력</button>
       </div>
-
       <!-- 기본정보 -->
       <div class="m-pane on" id="mpane-info">
-        <div class="form-grid">
+        <div class="fg2">
           <div class="fld full"><label>공사명</label><input type="text" id="e-proj"/></div>
           <div class="fld"><label>검측 부위</label><input type="text" id="e-zone"/></div>
           <div class="fld"><label>검측일</label><input type="date" id="e-date"/></div>
@@ -206,24 +274,21 @@ tr:hover td{background:#F8F7F4;cursor:pointer}
             </select>
           </div>
         </div>
-        <button class="save-btn" onclick="saveRecord()">💾 수정 저장</button>
+        <button class="btn btn-primary btn-full" onclick="saveRec()">💾 수정 저장</button>
       </div>
-
       <!-- 체크리스트 -->
       <div class="m-pane" id="mpane-check">
         <div id="ck-list"></div>
-        <button class="save-btn" onclick="saveRecord()">💾 체크리스트 저장</button>
+        <button class="btn btn-primary btn-full" style="margin-top:12px" onclick="saveRec()">💾 저장</button>
       </div>
-
       <!-- 사진 -->
       <div class="m-pane" id="mpane-photo">
         <div id="photo-view"></div>
       </div>
-
       <!-- 출력 -->
       <div class="m-pane" id="mpane-print">
-        <p style="font-size:13px;color:#5A5750;margin-bottom:14px">출력할 문서를 선택하세요. 파일이 다운로드되면 열어서 인쇄하거나 PDF로 저장하세요.</p>
-        <div class="print-btns">
+        <p style="font-size:13px;color:#5A5750;margin-bottom:12px">출력할 문서를 선택하세요</p>
+        <div class="print-grid">
           <button class="print-btn" onclick="printReq()">📋 갑지</button>
           <button class="print-btn" onclick="printCheck()">✅ 체크리스트</button>
           <button class="print-btn green" onclick="printPhoto()">📷 사진대지</button>
@@ -234,406 +299,700 @@ tr:hover td{background:#F8F7F4;cursor:pointer}
   </div>
 </div>
 
+<!-- 파일 업로드 모달 -->
+<div class="modal-bg" id="upload-modal">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-hd">
+      <h2>파일 업로드로 항목 추가</h2>
+      <button class="modal-close" onclick="closeModal('upload-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:#5A5750;margin-bottom:14px">
+        엑셀(.xlsx) 파일을 올리면 항목을 자동으로 읽어와요.<br>
+        A열: 항목명, B열: 검사기준 으로 구성되어 있으면 가장 잘 인식해요.
+      </p>
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" accept=".xlsx,.xls,.csv" onchange="parseFile(event)"/>
+        <div class="ui">📂</div>
+        <p>엑셀 파일을 끌어다 놓거나 클릭해서 선택</p>
+        <small>.xlsx / .xls / .csv 지원</small>
+      </div>
+
+      <!-- 직접 입력 -->
+      <div style="margin-top:16px;padding-top:16px;border-top:.5px solid #D4D0C8">
+        <div class="card-t">직접 입력으로 추가</div>
+        <div style="display:flex;gap:8px;margin-bottom:6px">
+          <div class="fld" style="flex:1"><label>공종</label><input type="text" id="direct-gong" placeholder="예: 철근 콘크리트 공사"/></div>
+          <div class="fld" style="flex:1"><label>세부공종</label><input type="text" id="direct-sub" placeholder="예: 기둥 철근배근"/></div>
+        </div>
+        <div id="direct-items">
+          <div class="direct-row" style="display:flex;gap:6px;margin-bottom:5px">
+            <input type="text" placeholder="항목명" style="flex:1;padding:7px 9px;font-size:12px;background:#F2F1ED;border:.5px solid #D4D0C8;border-radius:5px;font-family:inherit"/>
+            <input type="text" placeholder="검사기준 (선택)" style="width:150px;padding:7px 9px;font-size:12px;background:#F2F1ED;border:.5px solid #D4D0C8;border-radius:5px;font-family:inherit"/>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-sec" onclick="addDirectRow()">+ 항목 추가</button>
+          <button class="btn btn-green" style="flex:1" onclick="saveDirectItems()">💾 저장</button>
+        </div>
+      </div>
+
+      <!-- 파싱 결과 -->
+      <div id="parse-result" style="display:none">
+        <div style="margin-top:16px;padding-top:16px;border-top:.5px solid #D4D0C8">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div class="card-t" style="margin:0">파일에서 읽은 항목</div>
+            <div style="display:flex;gap:6px;align-items:center">
+              <div class="fld" style="margin:0"><input type="text" id="parse-gong" placeholder="공종" style="font-size:12px;padding:5px 8px"/></div>
+              <div class="fld" style="margin:0"><input type="text" id="parse-sub" placeholder="세부공종" style="font-size:12px;padding:5px 8px"/></div>
+            </div>
+          </div>
+          <div id="parse-items"></div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button class="btn btn-sec" onclick="selectAllParse()">전체 선택</button>
+            <button class="btn btn-green" style="flex:1" onclick="saveParsed()">✅ 선택 항목 저장</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPA_URL = 'https://vztrzaenlwhlrwiezpqv.supabase.co';
 const SUPA_KEY = 'sb_publishable_i63qpuTeOT-JaXqlr5E6Tg_7pAcSn4Z';
 const { createClient } = supabase;
-const supa = createClient(SUPA_URL, SUPA_KEY);
+const db = createClient(SUPA_URL, SUPA_KEY);
 
 let allData = [];
 let curRec = null;
+let gongData = {}; // {공종: {세부공종: [{n,s}]}}
+let selGong = null;
+let selSub = null;
 
 // ── 초기화 ──
 async function init() {
   const today = new Date();
-  document.getElementById('today-date').textContent =
+  document.getElementById('today-dt').textContent =
     today.getFullYear() + '.' + (today.getMonth()+1) + '.' + today.getDate();
-  await loadList();
+  await Promise.all([loadList(), loadGongData()]);
 }
 
-// ── 목록 불러오기 ──
+// ══════════════════════════════
+// 검측 목록
+// ══════════════════════════════
 async function loadList() {
   document.getElementById('list-body').innerHTML =
     '<tr><td colspan="7" class="loading"><span class="spinner"></span>불러오는 중...</td></tr>';
   try {
-    const { data, error } = await supa
-      .from('inspections')
-      .select('*')
-      .order('created_at', { ascending: false });
+    const { data, error } = await db.from('inspections').select('*').order('created_at',{ascending:false});
     if (error) throw error;
     allData = data || [];
-    document.getElementById('conn-status').textContent = '✅ 연결됨';
-    updateStats();
-    updateGongFilter();
-    renderList(allData);
+    document.getElementById('conn-st').textContent = '✅ 연결됨';
+    updateStats(); renderList(allData);
   } catch(e) {
-    document.getElementById('conn-status').textContent = '❌ 연결 실패';
+    document.getElementById('conn-st').textContent = '❌ 연결 실패';
     document.getElementById('list-body').innerHTML =
-      '<tr><td colspan="7" class="empty">데이터를 불러올 수 없어요: ' + e.message + '</td></tr>';
+      '<tr><td colspan="7" class="empty">연결 실패: ' + e.message + '</td></tr>';
   }
 }
 
-// ── 통계 ──
 function updateStats() {
   const today = new Date().toISOString().split('T')[0];
-  const todayList = allData.filter(d => d.date === today);
-  const failList = allData.filter(d => {
-    const items = d.check_items || [];
-    return items.some(i => i.r === 'X');
-  });
-  const doneList = allData.filter(d => d.status === '완료');
-  document.getElementById('st-total').textContent = allData.length;
-  document.getElementById('st-today').textContent = todayList.length;
-  document.getElementById('st-fail').textContent = failList.length;
-  document.getElementById('st-done').textContent = doneList.length;
+  document.getElementById('st-tot').textContent = allData.length;
+  document.getElementById('st-today').textContent = allData.filter(d=>d.date===today).length;
+  document.getElementById('st-fail').textContent = allData.filter(d=>(d.check_items||[]).some(i=>i.r==='X')).length;
+  document.getElementById('st-done').textContent = allData.filter(d=>d.status==='완료').length;
 }
 
-// ── 공종 필터 ──
-function updateGongFilter() {
-  const gongs = [...new Set(allData.map(d => d.gong).filter(Boolean))];
-  const sel = document.getElementById('filter-gong');
-  sel.innerHTML = '<option value="">전체 공종</option>';
-  gongs.forEach(g => {
-    const o = document.createElement('option'); o.value = g; o.textContent = g; sel.appendChild(o);
-  });
-}
-
-// ── 필터링 ──
 function filterList() {
-  const kw = document.getElementById('search').value.toLowerCase();
-  const status = document.getElementById('filter-status').value;
-  const gong = document.getElementById('filter-gong').value;
-  const filtered = allData.filter(d => {
-    const matchKw = !kw ||
-      (d.proj||'').toLowerCase().includes(kw) ||
-      (d.zone||'').toLowerCase().includes(kw) ||
-      (d.gong||'').toLowerCase().includes(kw) ||
-      (d.sub||'').toLowerCase().includes(kw);
-    const matchStatus = !status || d.status === status;
-    const matchGong = !gong || d.gong === gong;
-    return matchKw && matchStatus && matchGong;
-  });
-  renderList(filtered);
+  const kw = document.getElementById('kw').value.toLowerCase();
+  const st = document.getElementById('flt-status').value;
+  renderList(allData.filter(d => {
+    const mk = !kw || [(d.proj||''),(d.zone||''),(d.gong||''),(d.sub||'')].some(s=>s.toLowerCase().includes(kw));
+    const ms = !st || d.status===st;
+    return mk && ms;
+  }));
 }
 
-// ── 목록 렌더링 ──
 function renderList(data) {
   if (!data.length) {
-    document.getElementById('list-body').innerHTML =
-      '<tr><td colspan="7" class="empty">검측 기록이 없어요</td></tr>';
+    document.getElementById('list-body').innerHTML = '<tr><td colspan="7" class="empty">검측 기록이 없어요</td></tr>';
     return;
   }
   document.getElementById('list-body').innerHTML = data.map(d => {
-    const items = d.check_items || [];
-    const ok = items.filter(i => i.r === 'O').length;
-    const fail = items.filter(i => i.r === 'X').length;
-    const photos = (d.photos || []).filter(p => p.src);
-    const statusBadge = d.status === '완료'
-      ? '<span class="badge badge-g">완료</span>'
-      : '<span class="badge badge-b">작성중</span>';
-    const failBadge = fail > 0
-      ? `<span class="badge badge-r" style="margin-left:4px">부적합 ${fail}</span>` : '';
-    return `<tr onclick="openModal('${d.id}')">
+    const items = d.check_items||[];
+    const ok = items.filter(i=>i.r==='O').length;
+    const fail = items.filter(i=>i.r==='X').length;
+    const phs = (d.photos||[]).filter(p=>p.src).length;
+    const sb = d.status==='완료' ? '<span class="badge badge-g">완료</span>' : '<span class="badge badge-b">작성중</span>';
+    const fb = fail>0 ? `<span class="badge badge-r" style="margin-left:4px">부적합 ${fail}</span>` : '';
+    return `<tr class="clickable" onclick="openRec('${d.id}')">
       <td style="white-space:nowrap">${d.date||'-'}</td>
       <td><strong>${d.zone||'-'}</strong></td>
       <td style="font-size:12px">${d.gong||'-'}<br><span style="color:#8A8780">${d.sub||''}</span></td>
       <td style="font-size:12px">${d.worker||'-'}</td>
-      <td>${items.length ? `<span style="font-size:12px">○ ${ok} / ${items.length}</span>${failBadge}` : '-'}</td>
-      <td style="font-size:12px">${photos.length ? photos.length + '장' : '-'}</td>
-      <td>${statusBadge}</td>
+      <td>${items.length?`<span style="font-size:12px">○ ${ok} / ${items.length}</span>${fb}`:'-'}</td>
+      <td style="font-size:12px">${phs?phs+'장':'-'}</td>
+      <td>${sb}</td>
     </tr>`;
   }).join('');
 }
 
-// ── 모달 열기 ──
-function openModal(id) {
-  curRec = allData.find(d => d.id === id);
+// ══════════════════════════════
+// 검측 상세 모달
+// ══════════════════════════════
+function openRec(id) {
+  curRec = allData.find(d=>d.id===id);
   if (!curRec) return;
   document.getElementById('modal-title').textContent = (curRec.zone||'검측') + ' · ' + (curRec.date||'');
-  // 기본정보 채우기
-  document.getElementById('e-proj').value = curRec.proj || '';
-  document.getElementById('e-zone').value = curRec.zone || '';
-  document.getElementById('e-date').value = curRec.date || '';
-  document.getElementById('e-gong').value = curRec.gong || '';
-  document.getElementById('e-sub').value = curRec.sub || '';
-  document.getElementById('e-worker').value = curRec.worker || '';
-  document.getElementById('e-agent').value = curRec.agent || '';
-  document.getElementById('e-sup').value = curRec.sup || '';
-  document.getElementById('e-docno').value = curRec.doc_no || '';
-  document.getElementById('e-status').value = curRec.status || '작성중';
-  // 체크리스트
-  renderCkList();
-  // 사진
-  renderPhotoView();
+  document.getElementById('e-proj').value = curRec.proj||'';
+  document.getElementById('e-zone').value = curRec.zone||'';
+  document.getElementById('e-date').value = curRec.date||'';
+  document.getElementById('e-gong').value = curRec.gong||'';
+  document.getElementById('e-sub').value = curRec.sub||'';
+  document.getElementById('e-worker').value = curRec.worker||'';
+  document.getElementById('e-agent').value = curRec.agent||'';
+  document.getElementById('e-sup').value = curRec.sup||'';
+  document.getElementById('e-docno').value = curRec.doc_no||'';
+  document.getElementById('e-status').value = curRec.status||'작성중';
+  renderCkList(); renderPhotoView();
   swMTab('info');
-  document.getElementById('modal').classList.add('open');
+  document.getElementById('rec-modal').classList.add('open');
 }
 
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-  curRec = null;
-}
-
-// ── 모달 탭 ──
-function swMTab(t) {
-  document.querySelectorAll('.m-tab').forEach((b,i) =>
-    b.classList.toggle('on', ['info','check','photo','print'][i] === t));
-  document.querySelectorAll('.m-pane').forEach(p => p.classList.remove('on'));
-  document.getElementById('mpane-' + t).classList.add('on');
-}
-
-// ── 체크리스트 렌더링 ──
 function renderCkList() {
-  const items = curRec.check_items || [];
-  if (!items.length) {
-    document.getElementById('ck-list').innerHTML = '<div class="empty">체크리스트 항목이 없어요</div>';
-    return;
-  }
-  document.getElementById('ck-list').innerHTML = items.map((item, i) => `
-    <div class="ck-item ${item.r === 'X' ? 'fail' : ''}" id="ck-${i}">
-      <div class="ck-num">${i+1}</div>
-      <div class="ck-body">
-        <div class="ck-name">${item.n || item.name || ''}</div>
-        ${(item.s||item.std) ? `<div class="ck-std">${item.s||item.std}</div>` : ''}
-        ${item.r === 'X' ? `<textarea class="ck-note" placeholder="부적합 내용" onchange="setCkNote(${i},this.value)">${item.note||''}</textarea>` : ''}
-      </div>
-      <div class="ox">
-        <button class="ox-btn ${item.r==='O'?'ok':''}" onclick="setCkR(${i},'O')">○</button>
-        <button class="ox-btn ${item.r==='X'?'ng':''}" onclick="setCkR(${i},'X')">✕</button>
-      </div>
-    </div>`).join('');
+  const items = curRec.check_items||[];
+  document.getElementById('ck-list').innerHTML = !items.length
+    ? '<div class="empty">체크리스트 항목이 없어요</div>'
+    : items.map((item,i)=>`
+      <div class="ck-item ${item.r==='X'?'fail':''}">
+        <div class="ck-num">${i+1}</div>
+        <div class="ck-body">
+          <div class="ck-name">${item.n||item.name||''}</div>
+          ${(item.s||item.std)?`<div class="ck-std">${item.s||item.std}</div>`:''}
+          ${item.r==='X'?`<textarea class="ck-note" placeholder="부적합 내용" onchange="setCkNote(${i},this.value)">${item.note||''}</textarea>`:''}
+        </div>
+        <div class="ox">
+          <button class="ox-btn ${item.r==='O'?'ok':''}" onclick="setCkR(${i},'O')">○</button>
+          <button class="ox-btn ${item.r==='X'?'ng':''}" onclick="setCkR(${i},'X')">✕</button>
+        </div>
+      </div>`).join('');
 }
 
-function setCkR(i, v) {
-  if (!curRec.check_items) return;
-  curRec.check_items[i].r = v;
-  if (v === 'O') curRec.check_items[i].note = '';
-  renderCkList();
-}
-function setCkNote(i, v) { if (curRec.check_items) curRec.check_items[i].note = v; }
+function setCkR(i,v){if(curRec.check_items){curRec.check_items[i].r=v;if(v==='O')curRec.check_items[i].note='';renderCkList();}}
+function setCkNote(i,v){if(curRec.check_items)curRec.check_items[i].note=v;}
 
-// ── 사진 뷰 ──
 function renderPhotoView() {
-  const photos = (curRec.photos || []).filter(p => p.src);
-  if (!photos.length) {
-    document.getElementById('photo-view').innerHTML = '<div class="no-photo">📷 저장된 사진이 없어요</div>';
-    return;
-  }
-  document.getElementById('photo-view').innerHTML =
-    `<div class="photo-grid">${photos.map(p => `
-      <div class="photo-item">
-        <img src="${p.src}" onclick="window.open('${p.src}')"/>
-        <div class="photo-cap">${p.cap || ''}</div>
-      </div>`).join('')}</div>`;
+  const photos=(curRec.photos||[]).filter(p=>p.src);
+  document.getElementById('photo-view').innerHTML = !photos.length
+    ? '<div style="text-align:center;padding:30px;color:#8A8780">📷 저장된 사진이 없어요</div>'
+    : `<div class="photo-grid">${photos.map(p=>`<div class="photo-item"><img src="${p.src}" onclick="window.open('${p.src}')"/><div class="photo-cap">${p.cap||''}</div></div>`).join('')}</div>`;
 }
 
-// ── 수정 저장 ──
-async function saveRecord() {
+async function saveRec() {
   if (!curRec) return;
   try {
-    const { error } = await supa.from('inspections').update({
-      proj: document.getElementById('e-proj').value,
-      zone: document.getElementById('e-zone').value,
-      date: document.getElementById('e-date').value,
-      gong: document.getElementById('e-gong').value,
-      sub: document.getElementById('e-sub').value,
-      worker: document.getElementById('e-worker').value,
-      agent: document.getElementById('e-agent').value,
-      sup: document.getElementById('e-sup').value,
-      doc_no: document.getElementById('e-docno').value,
-      status: document.getElementById('e-status').value,
-      check_items: curRec.check_items,
-    }).eq('id', curRec.id);
+    const { error } = await db.from('inspections').update({
+      proj:document.getElementById('e-proj').value,
+      zone:document.getElementById('e-zone').value,
+      date:document.getElementById('e-date').value,
+      gong:document.getElementById('e-gong').value,
+      sub:document.getElementById('e-sub').value,
+      worker:document.getElementById('e-worker').value,
+      agent:document.getElementById('e-agent').value,
+      sup:document.getElementById('e-sup').value,
+      doc_no:document.getElementById('e-docno').value,
+      status:document.getElementById('e-status').value,
+      check_items:curRec.check_items,
+    }).eq('id',curRec.id);
     if (error) throw error;
-    // 로컬 데이터도 업데이트
-    const idx = allData.findIndex(d => d.id === curRec.id);
-    if (idx >= 0) {
-      allData[idx] = { ...allData[idx],
-        proj: document.getElementById('e-proj').value,
-        zone: document.getElementById('e-zone').value,
-        date: document.getElementById('e-date').value,
-        gong: document.getElementById('e-gong').value,
-        sub: document.getElementById('e-sub').value,
-        worker: document.getElementById('e-worker').value,
-        status: document.getElementById('e-status').value,
-        check_items: curRec.check_items,
-      };
+    const idx=allData.findIndex(d=>d.id===curRec.id);
+    if (idx>=0) allData[idx]={...allData[idx],...{proj:document.getElementById('e-proj').value,zone:document.getElementById('e-zone').value,status:document.getElementById('e-status').value,check_items:curRec.check_items}};
+    renderList(allData); updateStats();
+    alert('✅ 저장됐어요!');
+  } catch(e) { alert('저장 실패: '+e.message); }
+}
+
+async function delRec() {
+  if (!curRec || !confirm('이 검측 기록을 삭제할까요?')) return;
+  try {
+    const { error } = await db.from('inspections').delete().eq('id',curRec.id);
+    if (error) throw error;
+    allData=allData.filter(d=>d.id!==curRec.id);
+    renderList(allData); updateStats();
+    closeModal('rec-modal');
+  } catch(e) { alert('삭제 실패: '+e.message); }
+}
+
+// ══════════════════════════════
+// 공종 관리
+// ══════════════════════════════
+async function loadGongData() {
+  try {
+    const { data, error } = await db.from('gong_settings').select('*').order('created_at');
+    if (error && error.code === '42P01') {
+      // 테이블 없으면 생성
+      await createGongTable();
+      return;
     }
-    renderList(allData);
-    updateStats();
+    if (error) throw error;
+    // DB 데이터를 gongData 구조로 변환
+    gongData = {};
+    (data||[]).forEach(row => {
+      if (!gongData[row.gong]) gongData[row.gong] = {};
+      if (!gongData[row.gong][row.sub]) gongData[row.gong][row.sub] = [];
+      gongData[row.gong][row.sub] = row.items || [];
+    });
+    // 기본 데이터가 없으면 기본값 추가
+    if (Object.keys(gongData).length === 0) await seedDefaultGong();
+    renderGongList();
+  } catch(e) {
+    console.log('공종 로드 실패:', e);
+    // 로컬 기본값 사용
+    gongData = {
+      '철근 콘크리트 공사': {
+        '벽체 철근배근': [
+          {n:'철근의 규격, 수량, 간격은 적정한가?',s:'도면 및 시방서 기준'},
+          {n:'피복은 적정한가?',s:'구조체 40mm 이상'},
+          {n:'결속 및 이음길이는 적합한가?',s:'설계 기준 이상'},
+          {n:'폭고정근 및 간격재 위치·수량은 적정한가?',s:'도면 기준'},
+          {n:'교차부 철근 배근은 적정한가?',s:'도면 기준'},
+          {n:'정착길이는 확보되었는가?',s:'설계 기준 이상'},
+          {n:'개구부·Box주위 보강, 취약부 보강근 설치',s:'도면 기준'},
+          {n:'청소는 되었는가?',s:'이물질·물 없을 것'},
+        ]
+      }
+    };
+    renderGongList();
+  }
+}
+
+async function createGongTable() {
+  // SQL 편집기에서 테이블 생성 안내
+  console.log('gong_settings 테이블 생성 필요');
+  await seedDefaultGong();
+}
+
+async function seedDefaultGong() {
+  const defaultData = [
+    { gong:'철근 콘크리트 공사', sub:'벽체 철근배근', items:[
+      {n:'철근의 규격, 수량, 간격은 적정한가?',s:'도면 및 시방서 기준'},
+      {n:'피복은 적정한가?',s:'구조체 40mm 이상'},
+      {n:'결속 및 이음길이는 적합한가?',s:'설계 기준 이상'},
+      {n:'폭고정근 및 간격재 위치·수량은 적정한가?',s:'도면 기준'},
+      {n:'교차부 철근 배근은 적정한가?',s:'도면 기준'},
+      {n:'정착길이는 확보되었는가?',s:'설계 기준 이상'},
+      {n:'개구부·Box주위 보강, 취약부 보강근 설치',s:'도면 기준'},
+      {n:'청소는 되었는가?',s:'이물질·물 없을 것'},
+    ]},
+    { gong:'철근 콘크리트 공사', sub:'기초 철근배근', items:[
+      {n:'철근 규격·수량·간격 적정',s:'도면 기준'},
+      {n:'피복 두께 확보',s:'기초 60mm 이상'},
+      {n:'이음 및 정착길이 확보',s:'설계 기준'},
+      {n:'청소 상태',s:'이물질 없을 것'},
+    ]},
+    { gong:'철근 콘크리트 공사', sub:'슬라브 철근배근', items:[
+      {n:'상부근·하부근 간격 적정',s:'도면 기준'},
+      {n:'피복 두께 확보',s:'슬라브 20mm 이상'},
+      {n:'단부 정착 확보',s:'설계 기준'},
+      {n:'스페이서 설치',s:'도면 기준'},
+    ]},
+    { gong:'거푸집 공사', sub:'벽체 거푸집', items:[
+      {n:'거푸집 변형·틈새 없음',s:'허용 오차 이내'},
+      {n:'간격재 설치 적정',s:'도면 기준'},
+      {n:'청소 및 박리제 도포',s:'시방서 기준'},
+    ]},
+    { gong:'마감 공사', sub:'바닥 미장', items:[
+      {n:'바닥 평활도 적정',s:'3m당 3mm 이내'},
+      {n:'두께 균일',s:'설계 기준'},
+    ]},
+  ];
+
+  try {
+    await db.from('gong_settings').insert(defaultData);
+    gongData = {};
+    defaultData.forEach(row => {
+      if (!gongData[row.gong]) gongData[row.gong] = {};
+      gongData[row.gong][row.sub] = row.items;
+    });
+  } catch(e) {
+    console.log('기본 데이터 삽입 실패:', e);
+  }
+  renderGongList();
+}
+
+function renderGongList() {
+  const keys = Object.keys(gongData);
+  const el = document.getElementById('gong-list-body');
+  if (!keys.length) {
+    el.innerHTML = '<div class="empty">공종이 없어요. 추가해주세요.</div>';
+    return;
+  }
+  el.innerHTML = keys.map(g => `
+    <div class="gong-item ${selGong===g?'active':''}" onclick="selectGong('${g}')">
+      <span>${g}</span>
+      <button class="gong-del" onclick="event.stopPropagation();delGong('${g}')">삭제</button>
+    </div>`).join('');
+  if (selGong) renderGongDetail();
+}
+
+function selectGong(g) {
+  selGong = g; selSub = null;
+  renderGongList();
+  renderGongDetail();
+}
+
+function renderGongDetail() {
+  const el = document.getElementById('gong-detail');
+  if (!selGong || !gongData[selGong]) { el.innerHTML = '<div style="text-align:center;padding:40px;color:#8A8780">공종을 선택하세요</div>'; return; }
+  const subs = Object.keys(gongData[selGong]);
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <h3 style="font-size:14px;font-weight:600">${selGong}</h3>
+      <button class="btn btn-primary" style="padding:6px 12px;font-size:12px" onclick="addSub()">+ 세부공종 추가</button>
+    </div>
+    <div id="sub-list">
+      ${subs.map(s=>`
+        <div class="sub-item ${selSub===s?'active':''}" onclick="selectSub('${s}')">
+          <div>
+            <div class="sub-name">${s}</div>
+            <div class="sub-cnt">${(gongData[selGong][s]||[]).length}개 항목</div>
+          </div>
+          <button class="btn btn-red" style="padding:4px 10px;font-size:11px" onclick="event.stopPropagation();delSub('${s}')">삭제</button>
+        </div>`).join('')}
+    </div>
+    ${selSub ? renderSubItems() : ''}`;
+}
+
+function selectSub(s) {
+  selSub = s;
+  renderGongDetail();
+}
+
+function renderSubItems() {
+  const items = gongData[selGong][selSub] || [];
+  return `
+    <div style="margin-top:16px;padding-top:16px;border-top:.5px solid #D4D0C8">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <h4 style="font-size:13px;font-weight:600">${selSub} — 체크리스트</h4>
+        <button class="btn btn-sec" style="padding:5px 10px;font-size:11px" onclick="addCkItem()">+ 항목 추가</button>
+      </div>
+      <div id="ck-edit-list">
+        ${items.map((item,i)=>`
+          <div class="ck-edit-item" id="cke-${i}">
+            <span class="drag-handle">⠿</span>
+            <span style="font-size:11px;color:#8A8780;width:18px;text-align:right">${i+1}</span>
+            <input type="text" value="${item.n||''}" placeholder="항목명" onchange="updateCkItem(${i},'n',this.value)" style="flex:1;padding:5px 8px;font-size:12px;background:#F2F1ED;border:.5px solid #D4D0C8;border-radius:4px;font-family:inherit"/>
+            <input type="text" value="${item.s||''}" placeholder="검사기준" onchange="updateCkItem(${i},'s',this.value)" style="width:150px;padding:5px 8px;font-size:12px;background:#F2F1ED;border:.5px solid #D4D0C8;border-radius:4px;font-family:inherit"/>
+            <button onclick="delCkItem(${i})" style="padding:4px 8px;background:none;border:.5px solid #E08080;border-radius:4px;font-size:11px;cursor:pointer;color:#B02A2A">✕</button>
+          </div>`).join('')}
+      </div>
+      <button class="btn btn-green btn-full" style="margin-top:10px" onclick="saveSubItems()">💾 저장</button>
+    </div>`;
+}
+
+function addCkItem() {
+  if (!gongData[selGong][selSub]) gongData[selGong][selSub] = [];
+  gongData[selGong][selSub].push({n:'',s:''});
+  renderGongDetail();
+}
+
+function updateCkItem(i, key, val) {
+  if (gongData[selGong] && gongData[selGong][selSub]) {
+    gongData[selGong][selSub][i][key] = val;
+  }
+}
+
+function delCkItem(i) {
+  gongData[selGong][selSub].splice(i, 1);
+  renderGongDetail();
+}
+
+async function saveSubItems() {
+  try {
+    const items = gongData[selGong][selSub].filter(i => i.n);
+    const { error } = await db.from('gong_settings')
+      .upsert({ gong: selGong, sub: selSub, items }, { onConflict: 'gong,sub' });
+    if (error) throw error;
     alert('✅ 저장됐어요!');
   } catch(e) {
-    alert('저장 실패: ' + e.message);
+    // upsert 실패시 delete + insert
+    try {
+      await db.from('gong_settings').delete().match({ gong: selGong, sub: selSub });
+      await db.from('gong_settings').insert({ gong: selGong, sub: selSub, items: gongData[selGong][selSub].filter(i=>i.n) });
+      alert('✅ 저장됐어요!');
+    } catch(e2) { alert('저장 실패: ' + e2.message); }
   }
 }
 
-// ── 삭제 ──
-async function deleteRecord() {
-  if (!curRec) return;
-  if (!confirm('이 검측 기록을 삭제할까요?')) return;
+function addGong() {
+  const name = prompt('새 공종 이름을 입력하세요:');
+  if (!name || !name.trim()) return;
+  const g = name.trim();
+  if (gongData[g]) { alert('이미 있는 공종이에요'); return; }
+  gongData[g] = {};
+  selGong = g;
+  renderGongList();
+}
+
+async function delGong(g) {
+  if (!confirm(`"${g}" 공종을 삭제할까요? 모든 세부공종과 항목이 삭제돼요.`)) return;
   try {
-    const { error } = await supa.from('inspections').delete().eq('id', curRec.id);
-    if (error) throw error;
-    allData = allData.filter(d => d.id !== curRec.id);
-    renderList(allData);
-    updateStats();
-    closeModal();
-    alert('삭제됐어요');
-  } catch(e) {
-    alert('삭제 실패: ' + e.message);
-  }
+    await db.from('gong_settings').delete().eq('gong', g);
+    delete gongData[g];
+    if (selGong === g) { selGong = null; selSub = null; }
+    renderGongList();
+  } catch(e) { alert('삭제 실패: ' + e.message); }
 }
 
-// ── 날짜 포맷 ──
-function fmtDate(d) {
-  if (!d) return '-';
-  const [y, m, dy] = d.split('-');
-  const days = ['일','월','화','수','목','금','토'];
-  const dt = new Date(d + 'T00:00:00');
-  return `${y}년 ${parseInt(m)}월 ${parseInt(dy)}일(${days[dt.getDay()]})`;
+function addSub() {
+  const name = prompt('새 세부공종 이름을 입력하세요:');
+  if (!name || !name.trim()) return;
+  const s = name.trim();
+  if (gongData[selGong][s]) { alert('이미 있는 세부공종이에요'); return; }
+  gongData[selGong][s] = [];
+  selSub = s;
+  renderGongDetail();
 }
 
-// ── 출력 공통 CSS ──
-const PCSS = `@page{margin:15mm}*{box-sizing:border-box}
-body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:12px;color:#111;padding:16px}
+async function delSub(s) {
+  if (!confirm(`"${s}" 세부공종을 삭제할까요?`)) return;
+  try {
+    await db.from('gong_settings').delete().match({ gong: selGong, sub: s });
+    delete gongData[selGong][s];
+    if (selSub === s) selSub = null;
+    renderGongDetail();
+  } catch(e) { alert('삭제 실패: ' + e.message); }
+}
+
+// ══════════════════════════════
+// 파일 업로드 & 파싱
+// ══════════════════════════════
+function openUploadModal() {
+  document.getElementById('parse-result').style.display = 'none';
+  document.getElementById('upload-modal').classList.add('open');
+}
+
+function parseFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const wb = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      const items = [];
+      rows.forEach((row, ri) => {
+        if (ri === 0) return; // 헤더 스킵
+        const n = String(row[0]||row[1]||'').trim();
+        const s = String(row[1]||row[2]||'').trim();
+        if (n && n.length > 1 && n !== s) items.push({ n, s: s !== n ? s : '' });
+      });
+      if (!items.length) { alert('항목을 찾을 수 없어요. A열에 항목명이 있는지 확인하세요.'); return; }
+      showParsed(items);
+    } catch(err) { alert('파일 읽기 오류: ' + err.message); }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function showParsed(items) {
+  const el = document.getElementById('parse-items');
+  el.innerHTML = items.map((item, i) => `
+    <div class="parse-row">
+      <input type="checkbox" id="pi-${i}" checked/>
+      <span>${item.n}</span>
+      <span class="parse-std">${item.s||''}</span>
+    </div>`).join('');
+  document.getElementById('parse-result').style.display = 'block';
+  document.getElementById('parse-result')._items = items;
+  // 공종 자동 입력
+  if (selGong) document.getElementById('parse-gong').value = selGong;
+  if (selSub) document.getElementById('parse-sub').value = selSub;
+}
+
+function selectAllParse() {
+  document.querySelectorAll('#parse-items input[type=checkbox]').forEach(cb => cb.checked = true);
+}
+
+async function saveParsed() {
+  const gong = document.getElementById('parse-gong').value.trim();
+  const sub  = document.getElementById('parse-sub').value.trim();
+  if (!gong || !sub) { alert('공종과 세부공종을 입력하세요'); return; }
+  const items = document.getElementById('parse-result')._items || [];
+  const selected = items.filter((_,i) => {
+    const cb = document.getElementById('pi-'+i);
+    return cb && cb.checked;
+  });
+  if (!selected.length) { alert('항목을 선택하세요'); return; }
+
+  if (!gongData[gong]) gongData[gong] = {};
+  const existing = gongData[gong][sub] || [];
+  gongData[gong][sub] = [...existing, ...selected];
+
+  try {
+    await db.from('gong_settings').delete().match({ gong, sub });
+    await db.from('gong_settings').insert({ gong, sub, items: gongData[gong][sub] });
+    selGong = gong; selSub = sub;
+    renderGongList();
+    closeModal('upload-modal');
+    swPage('gong');
+    alert(`✅ ${selected.length}개 항목이 "${gong} > ${sub}"에 저장됐어요!`);
+  } catch(e) { alert('저장 실패: ' + e.message); }
+}
+
+// 직접 입력
+function addDirectRow() {
+  const container = document.getElementById('direct-items');
+  const row = document.createElement('div');
+  row.className = 'direct-row';
+  row.style.cssText = 'display:flex;gap:6px;margin-bottom:5px';
+  row.innerHTML = `
+    <input type="text" placeholder="항목명" style="flex:1;padding:7px 9px;font-size:12px;background:#F2F1ED;border:.5px solid #D4D0C8;border-radius:5px;font-family:inherit"/>
+    <input type="text" placeholder="검사기준 (선택)" style="width:150px;padding:7px 9px;font-size:12px;background:#F2F1ED;border:.5px solid #D4D0C8;border-radius:5px;font-family:inherit"/>
+    <button onclick="this.parentElement.remove()" style="padding:5px 8px;background:none;border:.5px solid #E08080;border-radius:4px;font-size:11px;cursor:pointer;color:#B02A2A">✕</button>`;
+  container.appendChild(row);
+}
+
+async function saveDirectItems() {
+  const gong = document.getElementById('direct-gong').value.trim();
+  const sub  = document.getElementById('direct-sub').value.trim();
+  if (!gong || !sub) { alert('공종과 세부공종을 입력하세요'); return; }
+
+  const rows = document.querySelectorAll('#direct-items .direct-row');
+  const items = [];
+  rows.forEach(row => {
+    const inputs = row.querySelectorAll('input');
+    const n = inputs[0]?.value.trim();
+    const s = inputs[1]?.value.trim();
+    if (n) items.push({ n, s: s || '' });
+  });
+  if (!items.length) { alert('항목을 입력하세요'); return; }
+
+  if (!gongData[gong]) gongData[gong] = {};
+  const existing = gongData[gong][sub] || [];
+  gongData[gong][sub] = [...existing, ...items];
+
+  try {
+    await db.from('gong_settings').delete().match({ gong, sub });
+    await db.from('gong_settings').insert({ gong, sub, items: gongData[gong][sub] });
+    selGong = gong; selSub = sub;
+    renderGongList();
+    closeModal('upload-modal');
+    swPage('gong');
+    alert(`✅ ${items.length}개 항목이 저장됐어요!`);
+  } catch(e) { alert('저장 실패: ' + e.message); }
+}
+
+// ══════════════════════════════
+// 화면 전환
+// ══════════════════════════════
+function swPage(p) {
+  document.querySelectorAll('.page-tab').forEach((b,i)=>b.classList.toggle('on',['list','gong'][i]===p));
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('on'));
+  document.getElementById('page-'+p).classList.add('on');
+}
+
+function swMTab(t) {
+  document.querySelectorAll('.m-tab').forEach((b,i)=>b.classList.toggle('on',['info','check','photo','print'][i]===t));
+  document.querySelectorAll('.m-pane').forEach(p=>p.classList.remove('on'));
+  document.getElementById('mpane-'+t).classList.add('on');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  if (id==='rec-modal') curRec=null;
+}
+
+// 모달 바깥 클릭시 닫기
+document.querySelectorAll('.modal-bg').forEach(bg => {
+  bg.addEventListener('click', e => { if (e.target===bg) closeModal(bg.id); });
+});
+
+// ══════════════════════════════
+// 출력
+// ══════════════════════════════
+const PCSS=`@page{margin:15mm}*{box-sizing:border-box}body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:12px;color:#111;padding:16px}
 .pb{display:block;margin:0 auto 12px;padding:8px 22px;background:#1F3864;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit}
 @media print{.pb{display:none}body{padding:0}}
 table{width:100%;border-collapse:collapse}td,th{border:1px solid #999;padding:6px 9px;vertical-align:middle}
 .lbl{background:#f0f0f0;font-weight:600;text-align:center;width:90px}
-.sig{height:44px;text-align:center;font-size:11px;color:#555}
-.hr{border:none;border-top:2px double #666;margin:16px 0}`;
+.sig{height:44px;text-align:center;font-size:11px;color:#555}.hr{border:none;border-top:2px double #666;margin:16px 0}`;
 
-function dlHTML(html, fname) {
-  const b = new Blob([html], { type: 'text/html;charset=utf-8' });
-  const u = URL.createObjectURL(b);
-  const a = document.createElement('a'); a.href = u; a.download = fname; a.click();
-  URL.revokeObjectURL(u);
-}
+function dlHTML(html,fname){const b=new Blob([html],{type:'text/html;charset=utf-8'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=fname;a.click();URL.revokeObjectURL(u);}
 
-function getM() {
-  return {
-    proj: document.getElementById('e-proj').value || curRec.proj || '-',
-    zone: document.getElementById('e-zone').value || curRec.zone || '-',
-    date: document.getElementById('e-date').value || curRec.date || '-',
-    gong: document.getElementById('e-gong').value || curRec.gong || '-',
-    sub: document.getElementById('e-sub').value || curRec.sub || '-',
-    worker: document.getElementById('e-worker').value || curRec.worker || '-',
-    agent: document.getElementById('e-agent').value || curRec.agent || '-',
-    sup: document.getElementById('e-sup').value || curRec.sup || '-',
-    docFull: document.getElementById('e-docno').value || curRec.doc_no || '-',
-  };
-}
+function getM(){return{
+  proj:document.getElementById('e-proj').value||curRec.proj||'-',
+  zone:document.getElementById('e-zone').value||curRec.zone||'-',
+  date:document.getElementById('e-date').value||curRec.date||'-',
+  gong:document.getElementById('e-gong').value||curRec.gong||'-',
+  sub:document.getElementById('e-sub').value||curRec.sub||'-',
+  worker:document.getElementById('e-worker').value||curRec.worker||'-',
+  agent:document.getElementById('e-agent').value||curRec.agent||'-',
+  sup:document.getElementById('e-sup').value||curRec.sup||'-',
+  docFull:document.getElementById('e-docno').value||curRec.doc_no||'-',
+};}
 
-function printReq() {
-  const m = getM(); const fd = fmtDate(m.date);
-  dlHTML(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>갑지</title>
-<style>${PCSS}@page{size:A4}
-h1{font-size:17px;font-weight:700;text-align:center;border:2px solid #111;padding:9px;letter-spacing:.2em;margin-bottom:14px}
-h3{font-weight:700;border-bottom:1.5px solid #111;padding-bottom:5px;margin:14px 0 9px}</style></head><body>
+function fmtDate(d){if(!d)return'-';const[y,m,dy]=d.split('-');const days=['일','월','화','수','목','금','토'];const dt=new Date(d+'T00:00:00');return`${y}년 ${parseInt(m)}월 ${parseInt(dy)}일(${days[dt.getDay()]})`;}
+
+function printReq(){const m=getM();const fd=fmtDate(m.date);
+dlHTML(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>갑지</title><style>${PCSS}@page{size:A4}h1{font-size:17px;font-weight:700;text-align:center;border:2px solid #111;padding:9px;letter-spacing:.2em;margin-bottom:14px}h3{font-weight:700;border-bottom:1.5px solid #111;padding-bottom:5px;margin:14px 0 9px}</style></head><body>
 <button class="pb" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
 <div style="text-align:right;font-size:10px;color:#888;margin-bottom:4px">QF-C-S2307 | Rev. 01</div>
-<h1>검측 요청 및 결과 통보서</h1>
-<h3>■ 검측 요청서</h3>
-<table>
-<tr><td class="lbl">공 사 명</td><td colspan="3">${m.proj}</td></tr>
+<h1>검측 요청 및 결과 통보서</h1><h3>■ 검측 요청서</h3>
+<table><tr><td class="lbl">공 사 명</td><td colspan="3">${m.proj}</td></tr>
 <tr><td class="lbl">문서번호</td><td>${m.docFull}</td><td class="lbl">일 자</td><td>${fd}</td></tr>
 <tr><td class="lbl">위치·공종</td><td colspan="3">${m.gong}</td></tr>
 <tr><td class="lbl">공종구분</td><td colspan="3">☐토목 ■건축 ☐기계 ☐전기 ☐통신 ☐소방 ☐조경</td></tr>
 <tr><td class="lbl">검측 부위</td><td colspan="3">${m.zone}</td></tr>
-<tr><td class="lbl">검측 사항</td><td colspan="3">${m.sub}</td></tr>
-</table>
+<tr><td class="lbl">검측 사항</td><td colspan="3">${m.sub}</td></tr></table>
 <p style="font-size:11px;color:#666;margin:8px 0 12px">첨 부 : 검측 체크리스트, 시험성과, 야장 및 도면, 공사참여자 실명부</p>
 <table><tr><td class="sig">시공사 점검직원 &nbsp;${m.worker}&nbsp; (서명)</td><td class="sig">현 장 대 리 인 &nbsp;${m.agent}&nbsp; (서명)</td></tr></table>
-<hr class="hr"/>
-<h3>■ 검측 결과 통보서</h3>
-<table>
-<tr><td class="lbl">검측 일시</td><td colspan="3">${fd}</td></tr>
+<hr class="hr"/><h3>■ 검측 결과 통보서</h3>
+<table><tr><td class="lbl">검측 일시</td><td colspan="3">${fd}</td></tr>
 <tr><td class="lbl">검측 의견</td><td colspan="3" style="height:50px"></td></tr>
 <tr><td class="lbl">검측 결과</td><td colspan="3">☐ 적합 &nbsp; ☐ 조건부 적합 &nbsp; ☐ 재검측</td></tr>
-<tr><td class="lbl">조치 요구</td><td colspan="3">☐ 조치결과 확인</td></tr>
-</table>
-<table style="margin-top:8px"><tr>
-<td class="sig">건축감리원 &nbsp;${m.sup}&nbsp; (서명)</td>
-<td class="sig">총괄감리원 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (서명)</td>
-</tr></table></body></html>`, `갑지_${m.zone}_${m.date}.html`);
-}
+<tr><td class="lbl">조치 요구</td><td colspan="3">☐ 조치결과 확인</td></tr></table>
+<table style="margin-top:8px"><tr><td class="sig">건축감리원 &nbsp;${m.sup}&nbsp; (서명)</td><td class="sig">총괄감리원 (서명)</td></tr></table>
+</body></html>`,`갑지_${m.zone}_${m.date}.html`);}
 
-function printCheck() {
-  const m = getM();
-  const items = curRec.check_items || [];
-  const rows = items.map((item, i) => {
-    const mark = item.r === 'O' ? '○' : item.r === 'X' ? '×' : '';
-    const color = item.r === 'O' ? '#1D6A4A' : item.r === 'X' ? '#B02A2A' : '#aaa';
-    return `<tr><td style="text-align:center;color:#888">${i+1}</td>
-    <td>${item.n||item.name||''}</td>
-    <td style="font-size:10px;color:#666">${item.s||item.std||''}</td>
-    <td style="text-align:center;font-size:15px;color:${color}">${mark}</td>
-    <td></td><td style="text-align:center;color:${color};font-size:11px">${item.r==='O'?'적합':item.r==='X'?'부적합':''}</td>
-    <td></td><td style="font-size:11px;color:#555">${item.note||''}</td></tr>`;
-  }).join('');
-  dlHTML(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>체크리스트</title>
-<style>${PCSS}@page{size:A4 landscape}
-h1{font-size:15px;font-weight:700;text-align:center;border:2px solid #111;padding:7px;letter-spacing:.15em;margin-bottom:10px}
-th{background:#2E75B6;color:#fff;padding:5px 3px;text-align:center}
-tr:nth-child(even) td{background:#f7fbff}</style></head><body>
+function printCheck(){const m=getM();const items=curRec.check_items||[];
+const rows=items.map((item,i)=>{const mark=item.r==='O'?'○':item.r==='X'?'×':'';const color=item.r==='O'?'#1D6A4A':item.r==='X'?'#B02A2A':'#aaa';
+return`<tr><td style="text-align:center;color:#888">${i+1}</td><td>${item.n||item.name||''}</td><td style="font-size:10px;color:#666">${item.s||item.std||''}</td>
+<td style="text-align:center;font-size:15px;color:${color}">${mark}</td><td></td><td style="text-align:center;color:${color};font-size:11px">${item.r==='O'?'적합':item.r==='X'?'부적합':''}</td><td></td><td style="font-size:11px;color:#555">${item.note||''}</td></tr>`;}).join('');
+dlHTML(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>체크리스트</title><style>${PCSS}@page{size:A4 landscape}h1{font-size:15px;font-weight:700;text-align:center;border:2px solid #111;padding:7px;letter-spacing:.15em;margin-bottom:10px}th{background:#2E75B6;color:#fff;padding:5px 3px;text-align:center}tr:nth-child(even) td{background:#f7fbff}</style></head><body>
 <button class="pb" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
 <div style="text-align:right;font-size:10px;color:#888;margin-bottom:3px">QF-C-S2307 | Rev. 00</div>
 <h1>검측 Check List</h1>
-<table style="margin-bottom:10px">
-<tr><td class="lbl">1.구분</td><td>건 축</td><td class="lbl">2.검측일자</td><td>${fmtDate(m.date)}</td></tr>
+<table style="margin-bottom:10px"><tr><td class="lbl">1.구분</td><td>건 축</td><td class="lbl">2.검측일자</td><td>${fmtDate(m.date)}</td></tr>
 <tr><td class="lbl">3.공종</td><td>${m.gong}</td><td class="lbl">4.세부공종</td><td>${m.sub}</td></tr>
-<tr><td class="lbl">5.위치·부위</td><td>${m.zone}</td><td class="lbl">6.관련도면</td><td></td></tr>
-</table>
+<tr><td class="lbl">5.위치·부위</td><td>${m.zone}</td><td class="lbl">6.관련도면</td><td></td></tr></table>
 <table><tr><th style="width:32px">번호</th><th>검측내용</th><th style="width:110px">검사기준</th>
-<th style="width:48px">1차<br>시공</th><th style="width:48px">1차<br>감리</th>
-<th style="width:48px">2차<br>시공</th><th style="width:48px">2차<br>감리</th><th>조치사항</th></tr>
+<th style="width:48px">1차<br>시공</th><th style="width:48px">1차<br>감리</th><th style="width:48px">2차<br>시공</th><th style="width:48px">2차<br>감리</th><th>조치사항</th></tr>
 ${rows}</table>
 <p style="font-size:10px;color:#777;margin:5px 0">※ O / X 표기</p>
 <div style="font-size:11px;margin:5px 0">기타 점검내용<div style="border:1px solid #ccc;height:36px;margin-top:3px"></div></div>
-<table style="margin-top:8px">
-<tr><td class="lbl">시공자</td><td>성명: ${m.worker} &nbsp;(서명) &nbsp;&nbsp; 일자: ${m.date}</td></tr>
-<tr><td class="lbl">감리원</td><td>성명: ${m.sup} &nbsp;(서명) &nbsp;&nbsp; 일자:</td></tr>
-</table></body></html>`, `체크리스트_${m.zone}_${m.date}.html`);
-}
+<table style="margin-top:8px"><tr><td class="lbl">시공자</td><td>성명: ${m.worker} (서명) 일자: ${m.date}</td></tr>
+<tr><td class="lbl">감리원</td><td>성명: ${m.sup} (서명) 일자:</td></tr></table></body></html>`,`체크리스트_${m.zone}_${m.date}.html`);}
 
-function printPhoto() {
-  const m = getM();
-  const photos = (curRec.photos || []).filter(p => p.src);
-  if (!photos.length) { alert('저장된 사진이 없어요'); return; }
-  const pages = [];
-  for (let i = 0; i < photos.length; i += 2) pages.push(photos.slice(i, i + 2));
-  const pHtml = pages.map(group => {
-    const cells = group.map(p => `<td style="width:50%;border:1px solid #aaa;vertical-align:top;padding:0">
-      <table style="width:100%;border-collapse:collapse">
-        <tr><td style="background:#f0f0f0;padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px;font-weight:600;width:52px">장 소</td><td style="padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px">${m.zone}</td></tr>
-        <tr><td style="background:#f0f0f0;padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px;font-weight:600">일 시</td><td style="padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px">${fmtDate(m.date)}</td></tr>
-        <tr><td style="background:#f0f0f0;padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px;font-weight:600">내 용</td><td style="padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px">${p.cap||m.sub||'-'}</td></tr>
-        <tr><td colspan="2" style="padding:8px;text-align:center"><img src="${p.src}" style="max-width:100%;max-height:220px;object-fit:contain"/></td></tr>
-      </table></td>`).join('');
-    return `<div style="page-break-after:always"><table style="width:100%;border-collapse:collapse;border:2px solid #333"><tr>${cells}</tr></table></div>`;
-  }).join('');
-  dlHTML(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>사진대지</title>
-<style>@page{size:A4 landscape;margin:12mm}body{font-family:'Malgun Gothic',sans-serif;padding:14px}
-.pb{display:block;margin:0 auto 10px;padding:8px 22px;background:#1F3864;color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit}
-@media print{.pb{display:none}body{padding:0}}</style></head><body>
+function printPhoto(){const m=getM();const photos=(curRec.photos||[]).filter(p=>p.src);if(!photos.length){alert('저장된 사진이 없어요');return;}
+const pages=[];for(let i=0;i<photos.length;i+=2)pages.push(photos.slice(i,i+2));
+const pHtml=pages.map(group=>{const cells=group.map(p=>`<td style="width:50%;border:1px solid #aaa;vertical-align:top;padding:0"><table style="width:100%;border-collapse:collapse">
+<tr><td style="background:#f0f0f0;padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px;font-weight:600;width:52px">장 소</td><td style="padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px">${m.zone}</td></tr>
+<tr><td style="background:#f0f0f0;padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px;font-weight:600">일 시</td><td style="padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px">${fmtDate(m.date)}</td></tr>
+<tr><td style="background:#f0f0f0;padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px;font-weight:600">내 용</td><td style="padding:4px 8px;border-bottom:1px solid #ddd;font-size:11px">${p.cap||m.sub||'-'}</td></tr>
+<tr><td colspan="2" style="padding:8px;text-align:center"><img src="${p.src}" style="max-width:100%;max-height:220px;object-fit:contain"/></td></tr></table></td>`).join('');
+return`<div style="page-break-after:always"><table style="width:100%;border-collapse:collapse;border:2px solid #333"><tr>${cells}</tr></table></div>`;}).join('');
+dlHTML(`<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>사진대지</title><style>@page{size:A4 landscape;margin:12mm}body{font-family:'Malgun Gothic',sans-serif;padding:14px}.pb{display:block;margin:0 auto 10px;padding:8px 22px;background:#1F3864;color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit}@media print{.pb{display:none}body{padding:0}}</style></head><body>
 <button class="pb" onclick="window.print()">🖨 인쇄 / PDF 저장</button>
 <div style="text-align:right;font-size:10px;color:#888;margin-bottom:3px">QF-C-S2307 | Rev. 01</div>
 <h2 style="text-align:center;font-size:15px;letter-spacing:.2em;border:2px solid #111;padding:7px;margin-bottom:10px">사 진 대 지</h2>
-<p style="font-size:11px;margin-bottom:10px"><strong>공사명:</strong> ${m.proj}</p>
-${pHtml}</body></html>`, `사진대지_${m.zone}_${m.date}.html`);
-}
+<p style="font-size:11px;margin-bottom:10px"><strong>공사명:</strong> ${m.proj}</p>${pHtml}</body></html>`,`사진대지_${m.zone}_${m.date}.html`);}
 
-function printAll() {
-  printReq();
-  setTimeout(() => printCheck(), 400);
-  setTimeout(() => printPhoto(), 800);
-}
-
-// 모달 바깥 클릭시 닫기
-document.getElementById('modal').addEventListener('click', e => {
-  if (e.target === document.getElementById('modal')) closeModal();
-});
+function printAll(){printReq();setTimeout(()=>printCheck(),400);setTimeout(()=>printPhoto(),800);}
 
 init();
 </script>
